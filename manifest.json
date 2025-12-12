@@ -1,8 +1,8 @@
 
 {
   "short_name": "مصحح الامتحانات",
-  "name": "مقيّم الامتحانات الذكي",
-  "description": "تطبيق لتصحيح الامتحانات تلقائيًا من الصور باستخدام الذكاء الاصطناعي.",
+  "name": "مقيّم الامتحانات الذكي AI",
+  "description": "تطبيق احترافي لتصحيح الامتحانات تلقائيًا من الصور باستخدام الذكاء الاصطناعي مع كشف الغش.",
   "id": "/",
   "start_url": "./index.html",
   "scope": "/",
@@ -32,5 +32,31 @@
       "purpose": "maskable"
     }
   ],
-  "categories": ["education", "productivity"]
+  "shortcuts": [
+    {
+      "name": "تصحيح جديد",
+      "short_name": "جديد",
+      "description": "ابدأ عملية تصحيح جديدة",
+      "url": "/?action=new",
+      "icons": [{ "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImciIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiM0ZjQ2ZTUiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiM3YzNhZWQiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgcng9IjEyOCIgZmlsbD0idXJsKCNnKSIvPjxwYXRoIGQ9Ik0xMzMgMjcwbDgwIDgwIDE3MC0xNzAiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSI2MCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBmaWxsPSJub25lIi8+PHBhdGggZD0iTTQwMCAxMDBsMjAgNDUgNDUgMjAtNDUgMjAtMjAgNDUtMjAtNDUtNDUtMjAgNDUtMjB6IiBmaWxsPSIjZmNkMzRkIi8+PC9zdmc+", "sizes": "192x192" }]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjgwIDcyMCI+PHJlY3Qgd2lkdGg9IjEyODAiIGhlaWdodD0iNzIwIiBmaWxsPSIjZjhmOGZjIi8+PHRleHQgeD0iNjQwIiB5PSIzNjAiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjQwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjMzMzIj5NYWluIEFwcCBTY3JlZW5zaG90PC90ZXh0Pjwvc3ZnPg==",
+      "sizes": "1280x720",
+      "type": "image/svg+xml",
+      "form_factor": "wide",
+      "label": "الشاشة الرئيسية للتطبيق"
+    },
+    {
+      "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA3MjAgMTI4MCI+PHJlY3Qgd2lkdGg9IjcyMCIgaGVpZ2h0PSIxMjgwIiBmaWxsPSIjZjhmOGZjIi8+PHRleHQgeD0iMzYwIiB5PSI2NDAiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjQwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjMzMzIj5Nb2JpbGUgVmlldyBTY3JlZW5zaG90PC90ZXh0Pjwvc3ZnPg==",
+      "sizes": "720x1280",
+      "type": "image/svg+xml",
+      "form_factor": "narrow",
+      "label": "عرض الهاتف المحمول"
+    }
+  ],
+  "categories": ["education", "productivity", "utilities"]
 }
+
