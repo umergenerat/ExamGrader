@@ -155,16 +155,16 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ result, graderName, not
 
 
   return (
-    <div className="animate-fade-in relative space-y-8">
+    <div className="animate-fade-in relative space-y-6 sm:space-y-8">
         {notification && (
-            <div className="p-5 bg-amber-50 dark:bg-amber-900/20 border-l-4 border-amber-500 rounded-r-xl shadow-sm text-amber-900 dark:text-amber-100 animate-fade-in" role="alert">
-                <div className="flex items-start gap-4">
+            <div className="p-4 sm:p-5 bg-amber-50 dark:bg-amber-900/20 border-l-4 border-amber-500 rounded-r-xl shadow-sm text-amber-900 dark:text-amber-100 animate-fade-in" role="alert">
+                <div className="flex items-start gap-3 sm:gap-4">
                     <div className="p-2 bg-amber-100 dark:bg-amber-900/40 rounded-full">
-                         <AlertTriangleIcon className="w-6 h-6 text-amber-600 dark:text-amber-400 flex-shrink-0"/>
+                         <AlertTriangleIcon className="w-5 h-5 sm:w-6 sm:h-6 text-amber-600 dark:text-amber-400 flex-shrink-0"/>
                     </div>
                     <div className="flex-grow">
-                        <p className="font-bold text-lg mb-1">{t('results.autoActionNotice')}</p>
-                        <p className="leading-relaxed opacity-90">{notification}</p>
+                        <p className="font-bold text-base sm:text-lg mb-1">{t('results.autoActionNotice')}</p>
+                        <p className="leading-relaxed opacity-90 text-sm sm:text-base">{notification}</p>
                         {onRestore && (
                             <button
                                 onClick={onRestore}
@@ -185,7 +185,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ result, graderName, not
             <button 
                 onClick={() => captureAndExport('download')}
                 disabled={isExporting || isSharing}
-                className="flex items-center gap-2 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 font-bold py-2.5 px-5 rounded-xl border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all shadow-sm disabled:opacity-50"
+                className="flex items-center gap-2 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 font-bold py-2 sm:py-2.5 px-4 sm:px-5 rounded-xl border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all shadow-sm disabled:opacity-50 text-sm sm:text-base"
             >
                 <DownloadIcon className="w-4 h-4" />
                 {isExporting ? t('results.exporting') : t('results.exportToPdf')}
@@ -193,7 +193,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ result, graderName, not
             <button 
                 onClick={() => captureAndExport('share')}
                 disabled={isSharing || isExporting}
-                className="flex items-center gap-2 bg-indigo-600 text-white font-bold py-2.5 px-5 rounded-xl hover:bg-indigo-700 transition-all shadow-md shadow-indigo-200 dark:shadow-none disabled:opacity-50"
+                className="flex items-center gap-2 bg-indigo-600 text-white font-bold py-2 sm:py-2.5 px-4 sm:px-5 rounded-xl hover:bg-indigo-700 transition-all shadow-md shadow-indigo-200 dark:shadow-none disabled:opacity-50 text-sm sm:text-base"
             >
                 <ShareIcon className="w-4 h-4" />
                 {isSharing ? t('results.sharing') : t('results.shareWithStudent')}
@@ -201,18 +201,18 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ result, graderName, not
         </div>
 
         {/* Dashboard Display (Screen View) */}
-        <div ref={displayRef} className="space-y-6">
+        <div ref={displayRef} className="space-y-4 sm:space-y-6">
           
           {/* Hero Section: Score & Integrity */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
             {/* Score Card */}
-            <div className={`md:col-span-2 p-6 rounded-2xl border shadow-sm flex flex-col justify-center items-center md:items-start relative overflow-hidden bg-white dark:bg-gray-800 border-gray-100 dark:border-gray-700`}>
+            <div className={`md:col-span-2 p-4 sm:p-6 rounded-2xl border shadow-sm flex flex-col justify-center items-center md:items-start relative overflow-hidden bg-white dark:bg-gray-800 border-gray-100 dark:border-gray-700`}>
                 <div className={`absolute top-0 right-0 w-32 h-32 rounded-full blur-3xl opacity-20 -mr-10 -mt-10 ${scorePercentage >= 75 ? 'bg-green-500' : scorePercentage >= 50 ? 'bg-yellow-500' : 'bg-red-500'}`}></div>
                 
-                <h2 className="text-gray-500 dark:text-gray-400 font-bold uppercase tracking-wider text-sm mb-2">{t('results.title')}</h2>
+                <h2 className="text-gray-500 dark:text-gray-400 font-bold uppercase tracking-wider text-xs sm:text-sm mb-2">{t('results.title')}</h2>
                 <div className="flex flex-col md:flex-row items-center gap-6 w-full z-10">
                      <div className="text-center md:text-left rtl:md:text-right">
-                         <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-1">{result.studentName}</h1>
+                         <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-1">{result.studentName}</h1>
                          <p className="text-gray-500 dark:text-gray-400 font-medium bg-gray-100 dark:bg-gray-700 px-3 py-1 rounded-full inline-block text-sm">{result.studentGroup}</p>
                      </div>
                      <div className="flex-grow"></div>
@@ -222,7 +222,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ result, graderName, not
                             <span className="text-4xl font-black text-gray-900 dark:text-white">{result.score}</span>
                             <span className="text-xl text-gray-400 font-medium">/{result.totalMarks}</span>
                          </div>
-                         <div className="w-20 h-20 rounded-full flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+                         <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full flex items-center justify-center bg-gray-50 dark:bg-gray-900">
                              <svg viewBox="0 0 36 36" className="w-full h-full transform -rotate-90">
                                 <path className="text-gray-200 dark:text-gray-700" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" strokeWidth="3" />
                                 <path className={`${scorePercentage >= 75 ? 'text-green-500' : scorePercentage >= 50 ? 'text-yellow-500' : 'text-red-500'} transition-all duration-1000 ease-out`} strokeDasharray={`${scorePercentage}, 100`} d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" strokeWidth="3" />
@@ -233,7 +233,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ result, graderName, not
             </div>
 
             {/* Integrity Card */}
-            <div className={`p-6 rounded-2xl border shadow-sm flex flex-col justify-center ${result.cheatingAnalysis.detected || result.cheatingAnalysis.isAiGenerated ? 'bg-red-50 dark:bg-red-900/20 border-red-100 dark:border-red-800/50' : 'bg-green-50 dark:bg-green-900/20 border-green-100 dark:border-green-800/50'}`}>
+            <div className={`p-4 sm:p-6 rounded-2xl border shadow-sm flex flex-col justify-center ${result.cheatingAnalysis.detected || result.cheatingAnalysis.isAiGenerated ? 'bg-red-50 dark:bg-red-900/20 border-red-100 dark:border-red-800/50' : 'bg-green-50 dark:bg-green-900/20 border-green-100 dark:border-green-800/50'}`}>
                  <div className="flex items-center gap-3 mb-3">
                     <div className={`p-2 rounded-full ${result.cheatingAnalysis.detected || result.cheatingAnalysis.isAiGenerated ? 'bg-red-100 dark:bg-red-900/40 text-red-600' : 'bg-green-100 dark:bg-green-900/40 text-green-600'}`}>
                         {(result.cheatingAnalysis.detected || result.cheatingAnalysis.isAiGenerated) ? <AlertTriangleIcon className="w-6 h-6" /> : <CheckCircleIcon className="w-6 h-6" />}
@@ -272,8 +272,8 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ result, graderName, not
           </div>
 
           {/* Feedback Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+            <div className="bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700">
               <h3 className="text-lg font-bold mb-4 flex items-center gap-2 text-gray-900 dark:text-white">
                   <span className="w-8 h-8 rounded-lg bg-green-100 dark:bg-green-900/30 text-green-600 flex items-center justify-center"><CheckIcon className="w-5 h-5" /></span>
                   {t('results.strengths')}
@@ -287,7 +287,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ result, graderName, not
                 ))}
               </ul>
             </div>
-            <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700">
+            <div className="bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700">
               <h3 className="text-lg font-bold mb-4 flex items-center gap-2 text-gray-900 dark:text-white">
                   <span className="w-8 h-8 rounded-lg bg-red-100 dark:bg-red-900/30 text-red-600 flex items-center justify-center"><XCircleIcon className="w-5 h-5" /></span>
                   {t('results.weaknesses')}
@@ -306,31 +306,31 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ result, graderName, not
           {/* Detailed Feedback List */}
           <div>
             <div className="flex items-center gap-4 mb-6">
-                <h3 className="text-2xl font-bold text-gray-900 dark:text-white">{t('results.detailedFeedback')}</h3>
+                <h3 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">{t('results.detailedFeedback')}</h3>
                 <div className="h-px bg-gray-200 dark:bg-gray-700 flex-grow"></div>
             </div>
             
-            <div className="space-y-6">
+            <div className="space-y-4 sm:space-y-6">
               {result.detailedFeedback.map((item, index) => (
                 <div key={index} className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden transition-all hover:shadow-md">
-                  <div className="bg-gray-50 dark:bg-gray-700/30 px-6 py-4 border-b border-gray-100 dark:border-gray-700 flex justify-between items-start gap-4">
-                    <h4 className="font-bold text-gray-900 dark:text-white text-lg flex-1 leading-snug">{t('results.question')} {index + 1}: <span className="text-gray-600 dark:text-gray-300 font-medium text-base ml-2">{item.question}</span></h4>
-                    <div className="flex-shrink-0 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 px-3 py-1 rounded-lg font-bold text-gray-900 dark:text-white shadow-sm">
-                        {item.marksAwarded} <span className="text-gray-400 text-sm font-normal">/ {item.maxMarks}</span>
+                  <div className="bg-gray-50 dark:bg-gray-700/30 px-4 sm:px-6 py-4 border-b border-gray-100 dark:border-gray-700 flex justify-between items-start gap-4">
+                    <h4 className="font-bold text-gray-900 dark:text-white text-base sm:text-lg flex-1 leading-snug">{t('results.question')} {index + 1}: <span className="text-gray-600 dark:text-gray-300 font-medium text-sm sm:text-base ml-2">{item.question}</span></h4>
+                    <div className="flex-shrink-0 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 px-3 py-1 rounded-lg font-bold text-gray-900 dark:text-white shadow-sm text-sm">
+                        {item.marksAwarded} <span className="text-gray-400 text-xs font-normal">/ {item.maxMarks}</span>
                     </div>
                   </div>
                   
-                  <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div className="p-4 sm:p-6 grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
                       {/* Student Answer */}
                       <div>
                           <p className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">{t('results.studentAnswer')}</p>
-                          <div className="p-4 bg-gray-50 dark:bg-gray-900/50 rounded-xl border border-gray-100 dark:border-gray-700/50 text-gray-800 dark:text-gray-200 leading-relaxed font-serif">
+                          <div className="p-4 bg-gray-50 dark:bg-gray-900/50 rounded-xl border border-gray-100 dark:border-gray-700/50 text-gray-800 dark:text-gray-200 leading-relaxed font-serif text-sm sm:text-base">
                              {renderAnswerWithPlagiarism(item.studentAnswer, result.cheatingAnalysis.webSources)}
                           </div>
                       </div>
 
                       {/* Ideal Answer & Evaluation */}
-                      <div className="space-y-6">
+                      <div className="space-y-4 sm:space-y-6">
                            <div>
                               <p className="text-xs font-bold uppercase tracking-wider text-green-600 dark:text-green-400 mb-2">{t('results.idealAnswer')}</p>
                               <div className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed italic border-l-2 border-green-200 dark:border-green-800 pl-3">
