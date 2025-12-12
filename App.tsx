@@ -124,7 +124,10 @@ const App: React.FC = () => {
         setSubmissionTime(getCurrentDateTimeLocal());
 
         try {
-            const storedApiKey = localStorage.getItem('geminiApiKey') || '';
+            // Check environment variables first (Support both API_KEY and GEMINI_API_KEY)
+            const envApiKey = process.env.API_KEY || process.env.GEMINI_API_KEY || '';
+            const storedApiKey = localStorage.getItem('geminiApiKey') || envApiKey;
+            
             const storedGraderName = localStorage.getItem('graderName') || '';
             const storedStrictness = (localStorage.getItem('gradingStrictness') as GradingStrictness) || 'Normal';
             const storedSensitivity = (localStorage.getItem('plagiarismSensitivity') as PlagiarismSensitivity) || 'Medium';
@@ -139,6 +142,11 @@ const App: React.FC = () => {
                 customInstructions: storedInstructions,
                 studentGroups: storedGroups,
             });
+
+            // If we loaded a key from Env but not local storage, save it to local storage for consistency
+            if (envApiKey && !localStorage.getItem('geminiApiKey')) {
+                localStorage.setItem('geminiApiKey', envApiKey);
+            }
 
             const parsedGroups = storedGroups.split('\n').map(g => g.trim()).filter(Boolean);
             if(parsedGroups.length > 0) {
