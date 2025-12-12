@@ -1,5 +1,5 @@
 
-const CACHE_NAME = 'ai-exam-grader-v4';
+const CACHE_NAME = 'ai-exam-grader-v5'; // Bumped version for new manifest
 const STATIC_ASSETS = [
   '/',
   '/index.html',
@@ -44,12 +44,23 @@ self.addEventListener('activate', event => {
 self.addEventListener('fetch', event => {
   const url = new URL(event.request.url);
 
-  // 1. Navigation Requests (HTML) - Network First, then Cache
+  // 1. Navigation Requests (HTML) - Network First, then Cache, then Fallback
   if (event.request.mode === 'navigate') {
     event.respondWith(
       fetch(event.request)
+        .then(response => {
+           return caches.open(CACHE_NAME).then(cache => {
+             cache.put(event.request, response.clone());
+             return response;
+           });
+        })
         .catch(() => {
-          return caches.match('/index.html');
+          // If network fails, try cache
+          return caches.match(event.request).then(response => {
+              if (response) return response;
+              // If not in cache (and network failed), return the index.html (SPA Fallback)
+              return caches.match('/index.html');
+          });
         })
     );
     return;
@@ -86,3 +97,4 @@ self.addEventListener('fetch', event => {
     })
   );
 });
+
