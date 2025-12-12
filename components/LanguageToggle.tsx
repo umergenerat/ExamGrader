@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { useAppContext } from '../context/AppContext';
 import type { Language } from '../context/AppContext';
@@ -36,7 +37,7 @@ const LanguageToggle: React.FC = () => {
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="p-2 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors rounded-full"
+        className={`p-2.5 rounded-full transition-all duration-200 ${isOpen ? 'bg-blue-100 dark:bg-blue-900/40 text-blue-600' : 'text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400'}`}
         title={t('app.header.changeLanguage')}
         aria-haspopup="true"
         aria-expanded={isOpen}
@@ -46,7 +47,7 @@ const LanguageToggle: React.FC = () => {
 
       {isOpen && (
         <div 
-          className="absolute top-full mt-2 ltr:right-0 rtl:left-0 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 py-1 z-20 animate-fade-in"
+          className="absolute top-full mt-3 ltr:-right-2 rtl:-left-2 w-56 bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 py-2 z-50 animate-fade-in origin-top"
           role="menu"
           aria-orientation="vertical"
           aria-labelledby="language-menu-button"
@@ -55,11 +56,15 @@ const LanguageToggle: React.FC = () => {
             <button
               key={lang.code}
               onClick={() => handleLanguageChange(lang.code)}
-              className="w-full flex items-center justify-between px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 ltr:text-left rtl:text-right"
+              className={`w-full flex items-center justify-between px-5 py-3.5 text-base font-semibold transition-colors ltr:text-left rtl:text-right
+                ${language === lang.code 
+                  ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300' 
+                  : 'text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700'
+                } first:rounded-t-lg last:rounded-b-lg`}
               role="menuitem"
             >
               <span>{lang.name}</span>
-              {language === lang.code && <CheckIcon className="w-5 h-5 text-blue-600" />}
+              {language === lang.code && <CheckIcon className="w-5 h-5 text-blue-600 dark:text-blue-400" />}
             </button>
           ))}
         </div>
