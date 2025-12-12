@@ -1,74 +1,88 @@
-const CACHE_NAME = 'ai-exam-grader-v3'; // Bump version to trigger update
-const urlsToCache = [
+
+const CACHE_NAME = 'ai-exam-grader-v4';
+const STATIC_ASSETS = [
   '/',
   '/index.html',
-  '/index.tsx', // Cache the main script
-  '/manifest.json' // Cache the manifest
+  '/index.tsx',
+  '/manifest.json'
+];
+
+// Domains that should be cached dynamically (CDNs)
+const EXTERNAL_DOMAINS = [
+  'cdn.tailwindcss.com',
+  'aistudiocdn.com',
+  'fonts.googleapis.com',
+  'fonts.gstatic.com'
 ];
 
 self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => {
-        console.log('Opened cache');
-        // Use addAll for atomic operation
-        return cache.addAll(urlsToCache);
-      })
+    caches.open(CACHE_NAME).then(cache => {
+      console.log('[SW] Pre-caching local assets');
+      return cache.addAll(STATIC_ASSETS);
+    })
   );
+  self.skipWaiting();
 });
 
 self.addEventListener('activate', event => {
-  const cacheWhitelist = [CACHE_NAME];
   event.waitUntil(
     caches.keys().then(cacheNames => {
       return Promise.all(
         cacheNames.map(cacheName => {
-          if (cacheWhitelist.indexOf(cacheName) === -1) {
-            console.log('Deleting old cache:', cacheName);
+          if (cacheName !== CACHE_NAME) {
+            console.log('[SW] Deleting old cache:', cacheName);
             return caches.delete(cacheName);
           }
         })
       );
     })
   );
-  // Ensures the new service worker takes control of the page immediately.
   return self.clients.claim();
 });
 
 self.addEventListener('fetch', event => {
-  // Use a cache-first strategy
-  event.respondWith(
-    caches.match(event.request)
-      .then(response => {
-        // Cache hit - return response
-        if (response) {
-          return response;
-        }
+  const url = new URL(event.request.url);
 
-        // Not in cache - fetch from network and cache it
-        return fetch(event.request).then(
-          networkResponse => {
-            // Check if we received a valid response.
-            // We don't cache non-GET requests or requests to Chrome extensions.
-            if (!networkResponse || networkResponse.status !== 200 || networkResponse.type !== 'basic' || event.request.method !== 'GET') {
-              return networkResponse;
+  // 1. Navigation Requests (HTML) - Network First, then Cache
+  if (event.request.mode === 'navigate') {
+    event.respondWith(
+      fetch(event.request)
+        .catch(() => {
+          return caches.match('/index.html');
+        })
+    );
+    return;
+  }
+
+  // 2. External Assets (CDNs for React, Fonts, Tailwind) - Stale-While-Revalidate
+  // This allows the app to load instantly from cache, while updating in the background.
+  if (EXTERNAL_DOMAINS.some(domain => url.hostname.includes(domain))) {
+    event.respondWith(
+      caches.open(CACHE_NAME).then(cache => {
+        return cache.match(event.request).then(cachedResponse => {
+          const fetchPromise = fetch(event.request).then(networkResponse => {
+            // Only cache valid responses
+            if (networkResponse && networkResponse.status === 200) {
+                cache.put(event.request, networkResponse.clone());
             }
-
-            // Clone the response because it's a one-time-use stream
-            const responseToCache = networkResponse.clone();
-
-            caches.open(CACHE_NAME)
-              .then(cache => {
-                cache.put(event.request, responseToCache);
-              });
-
             return networkResponse;
-          }
-        ).catch(error => {
-            console.error('Fetch failed:', error);
-            // Optional: return a fallback page if network fails, e.g.,
-            // return caches.match('/offline.html');
+          }).catch(err => {
+             // Network failed, nothing to do here, hope for cache
+             console.warn('[SW] Fetch failed for CDN asset', err);
+          });
+
+          return cachedResponse || fetchPromise;
         });
       })
+    );
+    return;
+  }
+
+  // 3. Local Static Assets - Cache First
+  event.respondWith(
+    caches.match(event.request).then(response => {
+      return response || fetch(event.request);
+    })
   );
 });
