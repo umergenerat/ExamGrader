@@ -1,0 +1,7 @@
+{
+  "name": "AI Exam Grader",
+  "description": "An application to automatically grade exams from images using AI. It provides a score, detailed feedback, and plagiarism detection.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
