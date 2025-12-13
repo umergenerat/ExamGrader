@@ -6,7 +6,7 @@ import ResultsDisplay from './components/ResultsDisplay';
 import Loader from './components/Loader';
 import SettingsModal from './components/SettingsModal';
 import GroupAnalytics from './components/GroupAnalytics';
-import { UploadIcon, ArchiveIcon, SettingsIcon, TrashIcon, DownloadIcon, FileTextIcon, ImageIcon, AlertTriangleIcon, RefreshIcon, CameraIcon, SearchIcon, XCircleIcon, PlusCircleIcon, CheckIcon, SortIcon, ClockIcon, ChartBarIcon, TableCellsIcon } from './components/icons';
+import { UploadIcon, ArchiveIcon, SettingsIcon, TrashIcon, DownloadIcon, FileTextIcon, ImageIcon, AlertTriangleIcon, RefreshIcon, CameraIcon, SearchIcon, XCircleIcon, PlusCircleIcon, CheckIcon, SortIcon, ClockIcon, ChartBarIcon, TableCellsIcon, InstallDesktopIcon } from './components/icons';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import * as XLSX from 'xlsx';
@@ -1457,28 +1457,42 @@ const App: React.FC = () => {
                         <h1 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white tracking-tight hidden sm:block">{t('app.title')}</h1>
                     </div>
                     
-                    <div className="flex items-center gap-2 sm:gap-3 bg-gray-100 dark:bg-gray-700/50 p-1 rounded-full">
-                        <LanguageToggle />
-                        <div className="w-px h-4 bg-gray-300 dark:bg-gray-600 mx-1"></div>
-                        <ThemeToggle />
-                        <div className="w-px h-4 bg-gray-300 dark:bg-gray-600 mx-1"></div>
-                        <button onClick={() => {
-                                setShowArchive(s => !s);
-                                if (showArchive) {
-                                    setViewingArchivedResult(null);
-                                    setArchiveSearchQuery(''); 
-                                }
-                            }} 
-                            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-semibold transition-all ${showArchive ? 'bg-blue-600 text-white shadow-sm' : 'text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400'}`}
-                            title={t('app.header.viewArchive', { count: archivedResults.length })}
-                        >
-                            <ArchiveIcon className="w-4 h-4 sm:w-auto" />
-                            <span className="hidden sm:inline">{showArchive ? t('app.header.closeArchive') : t('app.header.viewArchive', { count: archivedResults.length })}</span>
-                            <span className="sm:hidden text-xs font-bold">{archivedResults.length}</span>
-                        </button>
-                        <button onClick={() => setShowSettings(true)} title={t('app.header.settings')} className="p-2 text-gray-600 dark:text-gray-300 hover:bg-white dark:hover:bg-gray-600 rounded-full transition-all shadow-sm hover:shadow">
-                            <SettingsIcon className="w-5 h-5" />
-                        </button>
+                    <div className="flex items-center gap-3">
+                        {/* New Install Button in Header */}
+                        {installPromptEvent && (
+                            <button
+                                onClick={handleInstallApp}
+                                className="flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-full shadow-lg transition-all transform hover:scale-105"
+                                title={t('pwa.installButton')}
+                            >
+                                <InstallDesktopIcon className="w-5 h-5" />
+                                <span className="hidden sm:inline">{t('pwa.installButton')}</span>
+                            </button>
+                        )}
+                        
+                        <div className="flex items-center gap-2 sm:gap-3 bg-gray-100 dark:bg-gray-700/50 p-1 rounded-full">
+                            <LanguageToggle />
+                            <div className="w-px h-4 bg-gray-300 dark:bg-gray-600 mx-1"></div>
+                            <ThemeToggle />
+                            <div className="w-px h-4 bg-gray-300 dark:bg-gray-600 mx-1"></div>
+                            <button onClick={() => {
+                                    setShowArchive(s => !s);
+                                    if (showArchive) {
+                                        setViewingArchivedResult(null);
+                                        setArchiveSearchQuery(''); 
+                                    }
+                                }} 
+                                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-semibold transition-all ${showArchive ? 'bg-blue-600 text-white shadow-sm' : 'text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400'}`}
+                                title={t('app.header.viewArchive', { count: archivedResults.length })}
+                            >
+                                <ArchiveIcon className="w-4 h-4 sm:w-auto" />
+                                <span className="hidden sm:inline">{showArchive ? t('app.header.closeArchive') : t('app.header.viewArchive', { count: archivedResults.length })}</span>
+                                <span className="sm:hidden text-xs font-bold">{archivedResults.length}</span>
+                            </button>
+                            <button onClick={() => setShowSettings(true)} title={t('app.header.settings')} className="p-2 text-gray-600 dark:text-gray-300 hover:bg-white dark:hover:bg-gray-600 rounded-full transition-all shadow-sm hover:shadow">
+                                <SettingsIcon className="w-5 h-5" />
+                            </button>
+                        </div>
                     </div>
                 </nav>
             </header>
