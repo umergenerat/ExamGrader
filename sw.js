@@ -1,5 +1,5 @@
 
-const CACHE_NAME = 'ai-exam-grader-v5'; // Bumped version for new manifest
+const CACHE_NAME = 'ai-exam-grader-v6'; // Bumped version for new manifest
 const STATIC_ASSETS = [
   '/',
   '/index.html',
