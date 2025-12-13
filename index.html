@@ -43,6 +43,12 @@
       html {
         -webkit-tap-highlight-color: transparent;
         scroll-behavior: smooth;
+        /* Prevent pull-to-refresh on Android to feel more native */
+        overscroll-behavior-y: none;
+      }
+      body {
+        /* Prevent bounce effect */
+        overscroll-behavior-y: none;
       }
       html[lang="ar"] body {
         font-family: 'Cairo', sans-serif;
@@ -140,5 +146,11 @@
         });
       }
     </script>
+    <noscript>
+      <div style="text-align: center; padding: 20px; color: #666;">
+        <p>JavaScript is required to use this application.</p>
+      </div>
+    </noscript>
   </body>
 </html>
+
