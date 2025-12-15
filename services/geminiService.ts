@@ -115,7 +115,7 @@ export const constructGradingPrompt = (
     studentName: string, 
     studentGroup: string, 
     totalMarks: number, 
-    gradingStrictness: 'Lenient' | 'Normal' | 'Strict',
+    gradingStrictness: 'Lenient' | 'Normal' | 'Strict' | 'Scientific',
     plagiarismSensitivity: 'Low' | 'Medium' | 'High',
     customInstructions: string,
     matchingStudentName: string | null,
@@ -138,7 +138,17 @@ export const constructGradingPrompt = (
         }
 
         let strictnessInstruction = '';
-        if (gradingStrictness === 'Strict') {
+        if (gradingStrictness === 'Scientific') {
+            strictnessInstruction = `**MODE SCIENTIFIQUE (OBJECTIF) :**
+            Ceci est un examen scientifique (Maths, Physique, Sciences). Ignorez toute notion de clémence ou de sévérité subjective.
+            La notation doit être purement OBJECTIVE et basée sur des faits scientifiques.
+            Vérifiez avec une précision absolue :
+            1. L'exactitude des formules et théorèmes utilisés.
+            2. La logique des étapes de calcul.
+            3. L'exactitude des résultats numériques finaux.
+            4. L'utilisation correcte des unités et des notations scientifiques.
+            Ne donnez PAS de points pour l'intention si le raisonnement ou le résultat scientifique est faux.`;
+        } else if (gradingStrictness === 'Strict') {
             strictnessInstruction = 'La notation doit être extrêmement stricte, en déduisant des points même pour des erreurs mineures.';
         } else if (gradingStrictness === 'Lenient') {
             strictnessInstruction = 'La notation doit être indulgente, en se concentrant sur la compréhension par l\'étudiant des concepts de base plutôt que sur les détails mineurs.';
@@ -224,7 +234,17 @@ ${jsonSchema}`;
         }
 
         let strictnessInstruction = '';
-        if (gradingStrictness === 'Strict') {
+        if (gradingStrictness === 'Scientific') {
+            strictnessInstruction = `**SCIENTIFIC MODE (OBJECTIVE):**
+            This is a scientific exam (Math, Physics, Science). Ignore subjective leniency/strictness levels.
+            Grading must be strictly OBJECTIVE based on scientific facts.
+            Verify with absolute precision:
+            1. Correct formulas and theorems used.
+            2. Logical steps and derivation.
+            3. Exact final numerical results.
+            4. Correct units and scientific notation.
+            Do NOT award points for intent if the scientific reasoning or result is incorrect.`;
+        } else if (gradingStrictness === 'Strict') {
             strictnessInstruction = 'The grading must be extremely strict, deducting points for even minor errors.';
         } else if (gradingStrictness === 'Lenient') {
             strictnessInstruction = 'The grading should be lenient, focusing on the student\'s understanding of core concepts rather than minor details.';
@@ -310,7 +330,17 @@ ${jsonSchema}`;
     }
 
     let strictnessInstruction = '';
-    if (gradingStrictness === 'Strict') {
+    if (gradingStrictness === 'Scientific') {
+        strictnessInstruction = `**الوضع العلمي (موضوعي دقيق):**
+        هذا امتحان في مادة علمية (رياضيات، فيزياء، علوم). تجاهل أي مستويات ذاتية للتساهل أو الصرامة.
+        يجب أن يكون التصحيح موضوعيًا بحتًا ومستندًا إلى الحقائق العلمية.
+        تحقق بدقة متناهية من:
+        1. صحة القوانين والنظريات المستخدمة.
+        2. منطقية وتسلسل خطوات الحل.
+        3. دقة النتائج الحسابية النهائية.
+        4. الاستخدام الصحيح للوحدات والترميز العلمي.
+        لا تمنح نقاطًا على "النية" إذا كان الاستنتاج أو النتيجة العلمية خاطئة.`;
+    } else if (gradingStrictness === 'Strict') {
         strictnessInstruction = 'يجب أن يكون التقييم صارمًا للغاية، مع خصم النقاط لأقل الأخطاء.';
     } else if (gradingStrictness === 'Lenient') {
         strictnessInstruction = 'يجب أن يكون التقييم متساهلاً، مع التركيز على فهم الطالب للمفاهيم الأساسية بدلاً من التفاصيل الدقيقة.';
@@ -390,7 +420,7 @@ export const gradeExam = async (
     examFiles: File[], 
     totalMarks: number, 
     apiKey: string,
-    gradingStrictness: 'Lenient' | 'Normal' | 'Strict',
+    gradingStrictness: 'Lenient' | 'Normal' | 'Strict' | 'Scientific',
     plagiarismSensitivity: 'Low' | 'Medium' | 'High',
     customInstructions: string,
     matchingStudentName: string | null,
