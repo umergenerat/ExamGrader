@@ -17,7 +17,7 @@ import LanguageToggle from './components/LanguageToggle';
 
 type AppStep = 'studentInfo' | 'fileUpload' | 'grading' | 'results';
 
-export type GradingStrictness = 'Lenient' | 'Normal' | 'Strict';
+export type GradingStrictness = 'Lenient' | 'Normal' | 'Strict' | 'Scientific';
 export type PlagiarismSensitivity = 'Low' | 'Medium' | 'High';
 export interface AppSettings {
     apiKey: string;
@@ -1489,7 +1489,7 @@ const App: React.FC = () => {
                                 <span className="hidden sm:inline">{showArchive ? t('app.header.closeArchive') : t('app.header.viewArchive', { count: archivedResults.length })}</span>
                                 <span className="sm:hidden text-xs font-bold">{archivedResults.length}</span>
                             </button>
-                            <button onClick={() => setShowSettings(true)} title={t('app.header.settings')} className="p-2 text-gray-600 dark:text-gray-300 hover:bg-white dark:hover:bg-gray-600 rounded-full transition-all shadow-sm hover:shadow">
+                            <button onClick={() => setShowSettings(true)} title={t('app.header.settings')} className="p-2 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-white dark:hover:bg-gray-600 rounded-full transition-all shadow-sm hover:shadow">
                                 <SettingsIcon className="w-5 h-5" />
                             </button>
                         </div>
