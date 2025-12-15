@@ -227,6 +227,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, onSave, 
                     onChange={(e) => setSettings(s => ({...s, gradingStrictness: e.target.value as GradingStrictness}))}
                     className="w-full px-4 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
                   >
+                    <option value="Scientific">{t('settings.strictness.scientific')}</option>
                     <option value="Lenient">{t('settings.strictness.lenient')}</option>
                     <option value="Normal">{t('settings.strictness.normal')}</option>
                     <option value="Strict">{t('settings.strictness.strict')}</option>
