@@ -1,9 +1,8 @@
 
-const CACHE_NAME = 'ai-exam-grader-v7'; // Bumped version for new manifest
+const CACHE_NAME = 'ai-exam-grader-v8'; // Bumped version to invalidate old caches
 const STATIC_ASSETS = [
   '/',
   '/index.html',
-  '/index.tsx',
   '/manifest.json'
 ];
 
@@ -19,6 +18,7 @@ self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME).then(cache => {
       console.log('[SW] Pre-caching local assets');
+      // We try to cache both / and /index.html to be safe
       return cache.addAll(STATIC_ASSETS);
     })
   );
@@ -45,11 +45,12 @@ self.addEventListener('fetch', event => {
   const url = new URL(event.request.url);
 
   // 1. Navigation Requests (HTML) - Network First, then Cache, then Fallback
+  // This ensures we always try to get the fresh page from the server first.
   if (event.request.mode === 'navigate') {
     event.respondWith(
       fetch(event.request)
         .then(response => {
-           // Only cache valid responses (Status 200) to avoid caching 404s
+           // Only cache valid responses (Status 200) to avoid caching 404s or error pages
            if (response && response.status === 200 && response.type === 'basic') {
                const responseClone = response.clone();
                caches.open(CACHE_NAME).then(cache => {
@@ -59,11 +60,14 @@ self.addEventListener('fetch', event => {
            return response;
         })
         .catch(() => {
-          // If network fails, try cache
+          // If network fails (Offline), try cache
           return caches.match(event.request).then(response => {
               if (response) return response;
-              // If not in cache (and network failed), return the index.html (SPA Fallback)
-              return caches.match('/index.html');
+              
+              // SPA Fallback: If the specific URL isn't cached, serve index.html
+              // We check both '/' and '/index.html' to be sure
+              return caches.match('/')
+                .then(rootResp => rootResp || caches.match('/index.html'));
           });
         })
     );
@@ -71,19 +75,16 @@ self.addEventListener('fetch', event => {
   }
 
   // 2. External Assets (CDNs for React, Fonts, Tailwind) - Stale-While-Revalidate
-  // This allows the app to load instantly from cache, while updating in the background.
   if (EXTERNAL_DOMAINS.some(domain => url.hostname.includes(domain))) {
     event.respondWith(
       caches.open(CACHE_NAME).then(cache => {
         return cache.match(event.request).then(cachedResponse => {
           const fetchPromise = fetch(event.request).then(networkResponse => {
-            // Only cache valid responses
             if (networkResponse && networkResponse.status === 200) {
                 cache.put(event.request, networkResponse.clone());
             }
             return networkResponse;
           }).catch(err => {
-             // Network failed, nothing to do here, hope for cache
              console.warn('[SW] Fetch failed for CDN asset', err);
           });
 
@@ -94,7 +95,7 @@ self.addEventListener('fetch', event => {
     return;
   }
 
-  // 3. Local Static Assets - Cache First
+  // 3. Local Static Assets - Cache First, Network Fallback
   event.respondWith(
     caches.match(event.request).then(response => {
       return response || fetch(event.request);
