@@ -1,5 +1,5 @@
 
-const CACHE_NAME = 'ai-exam-grader-v6'; // Bumped version for new manifest
+const CACHE_NAME = 'ai-exam-grader-v7'; // Bumped version for new manifest
 const STATIC_ASSETS = [
   '/',
   '/index.html',
@@ -49,10 +49,14 @@ self.addEventListener('fetch', event => {
     event.respondWith(
       fetch(event.request)
         .then(response => {
-           return caches.open(CACHE_NAME).then(cache => {
-             cache.put(event.request, response.clone());
-             return response;
-           });
+           // Only cache valid responses (Status 200) to avoid caching 404s
+           if (response && response.status === 200 && response.type === 'basic') {
+               const responseClone = response.clone();
+               caches.open(CACHE_NAME).then(cache => {
+                   cache.put(event.request, responseClone);
+               });
+           }
+           return response;
         })
         .catch(() => {
           // If network fails, try cache
