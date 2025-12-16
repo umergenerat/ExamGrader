@@ -4,7 +4,7 @@
   "name": "مقيّم الامتحانات الذكي AI",
   "description": "تطبيق احترافي لتصحيح الامتحانات تلقائيًا من الصور باستخدام الذكاء الاصطناعي مع كشف الغش.",
   "id": "/",
-  "start_url": ".",
+  "start_url": "/",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait",
@@ -37,7 +37,7 @@
       "name": "تصحيح جديد",
       "short_name": "جديد",
       "description": "ابدأ عملية تصحيح جديدة",
-      "url": "?action=new",
+      "url": "/?action=new",
       "icons": [{ "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImciIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiM0ZjQ2ZTUiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiM3YzNhZWQiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgcng9IjEyOCIgZmlsbD0idXJsKCNnKSIvPjxwYXRoIGQ9Ik0xMzMgMjcwbDgwIDgwIDE3MC0xNzAiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSI2MCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBmaWxsPSJub25lIi8+PHBhdGggZD0iTTQwMCAxMDBsMjAgNDUgNDUgMjAtNDUgMjAtMjAgNDUtMjAtNDUtNDUtMjAgNDUtMjB6IiBmaWxsPSIjZmNkMzRkIi8+PC9zdmc+", "sizes": "192x192" }]
     }
   ],
