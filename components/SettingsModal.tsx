@@ -98,26 +98,26 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, onSave, 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center p-4" onClick={onClose}>
       <div 
-        className="bg-white dark:bg-gray-800 rounded-lg shadow-xl w-full max-w-4xl flex flex-col animate-fade-in-up max-h-[95vh]"
+        className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl w-full max-w-4xl flex flex-col animate-fade-in-up max-h-[95vh]"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="p-4 border-b border-gray-200 dark:border-gray-700 flex-shrink-0">
-          <h2 className="text-2xl font-bold">{t('settings.title')}</h2>
+        <div className="p-5 border-b border-gray-200 dark:border-gray-700 flex-shrink-0">
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">{t('settings.title')}</h2>
         </div>
 
         <div className="flex-grow overflow-hidden flex flex-col md:flex-row">
-          <div className="flex-shrink-0 w-full md:w-56 bg-gray-50 dark:bg-gray-900/50 p-6 border-b md:border-b-0 md:border-l rtl:md:border-l-0 rtl:md:border-r border-gray-200 dark:border-gray-700">
-            <h3 className="font-bold mb-4">{t('settings.navigation')}</h3>
+          <div className="flex-shrink-0 w-full md:w-64 bg-gray-50 dark:bg-gray-900/50 p-4 sm:p-6 border-b md:border-b-0 md:border-l rtl:md:border-l-0 rtl:md:border-r border-gray-200 dark:border-gray-700 overflow-x-auto">
+            <h3 className="font-bold mb-3 md:mb-4 hidden md:block text-gray-900 dark:text-white">{t('settings.navigation')}</h3>
             <nav>
-                <ul className="space-y-2">
-                    <li><button onClick={() => scrollToSection('api-key-section')} className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 w-full ltr:text-left rtl:text-right transition">{t('settings.apiKey.label')}</button></li>
-                    <li><button onClick={() => scrollToSection('student-groups-section')} className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 w-full ltr:text-left rtl:text-right transition">{t('settings.studentGroups.label')}</button></li>
-                    <li><button onClick={() => scrollToSection('advanced-settings-section')} className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 w-full ltr:text-left rtl:text-right transition">{t('settings.advanced.title')}</button></li>
+                <ul className="flex md:block space-x-4 md:space-x-0 md:space-y-2 whitespace-nowrap md:whitespace-normal">
+                    <li><button onClick={() => scrollToSection('api-key-section')} className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 bg-white md:bg-transparent px-3 py-1.5 md:p-0 rounded-full md:rounded-none shadow-sm md:shadow-none w-auto md:w-full ltr:text-left rtl:text-right transition">{t('settings.apiKey.label')}</button></li>
+                    <li><button onClick={() => scrollToSection('student-groups-section')} className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 bg-white md:bg-transparent px-3 py-1.5 md:p-0 rounded-full md:rounded-none shadow-sm md:shadow-none w-auto md:w-full ltr:text-left rtl:text-right transition">{t('settings.studentGroups.label')}</button></li>
+                    <li><button onClick={() => scrollToSection('advanced-settings-section')} className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 bg-white md:bg-transparent px-3 py-1.5 md:p-0 rounded-full md:rounded-none shadow-sm md:shadow-none w-auto md:w-full ltr:text-left rtl:text-right transition">{t('settings.advanced.title')}</button></li>
                 </ul>
             </nav>
           </div>
 
-          <div className="flex-grow overflow-y-auto p-6">
+          <div className="flex-grow overflow-y-auto p-4 sm:p-6">
             <div id="api-key-section" className="scroll-mt-6 space-y-4">
                 <div>
                   <label htmlFor="apiKey" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
@@ -227,6 +227,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, onSave, 
                     onChange={(e) => setSettings(s => ({...s, gradingStrictness: e.target.value as GradingStrictness}))}
                     className="w-full px-4 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
                   >
+                    <option value="Scientific">{t('settings.strictness.scientific')}</option>
                     <option value="Lenient">{t('settings.strictness.lenient')}</option>
                     <option value="Normal">{t('settings.strictness.normal')}</option>
                     <option value="Strict">{t('settings.strictness.strict')}</option>
@@ -271,16 +272,16 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, onSave, 
           </div>
         </div>
 
-        <div className="p-4 border-t border-gray-200 dark:border-gray-700 flex justify-end gap-3 flex-shrink-0">
+        <div className="p-4 sm:p-5 border-t border-gray-200 dark:border-gray-700 flex justify-end gap-3 flex-shrink-0">
           <button
             onClick={onClose}
-            className="px-4 py-2 bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-500 transition"
+            className="px-4 sm:px-6 py-2.5 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 font-semibold rounded-xl hover:bg-gray-200 dark:hover:bg-gray-600 transition"
           >
             {t('common.cancel')}
           </button>
           <button
             onClick={handleSave}
-            className="px-4 py-2 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 transition"
+            className="px-4 sm:px-6 py-2.5 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 transition shadow-lg shadow-blue-500/20"
           >
             {t('common.save')}
           </button>
@@ -291,3 +292,4 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, onSave, 
 };
 
 export default SettingsModal;
+

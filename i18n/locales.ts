@@ -187,16 +187,17 @@ export const translations = {
         title: 'Paramètres de notation avancés',
         helpTitle: 'Que signifient ces paramètres ?',
         help: {
-            strictness: 'Détermine la précision du correcteur. "Indulgent" se concentre sur la compréhension générale, tandis que "Strict" déduit des points pour les plus petites erreurs.',
+            strictness: 'Le mode "Scientifique (Objectif)" annule les niveaux subjectifs et impose une précision exacte. "Indulgent" se concentre sur la compréhension générale, tandis que "Strict" pénalise les moindres erreurs.',
             sensitivity: 'Contrôle le degré de suspicion du correcteur. "Faible" nécessite un chevauchement important, tandis que "Élevée" peut détecter des similitudes de formulation ou d\'idées.',
             instructions: 'Vous pouvez guider le correcteur pour qu\'il se concentre sur des aspects spécifiques, tels que "ignorer les fautes d\'orthographe" ou "se concentrer sur la méthode, pas sur le résultat final".',
         },
       },
       strictness: {
-        label: 'Rigueur de la notation',
-        lenient: 'Indulgente',
-        normal: 'Normale',
-        strict: 'Stricte',
+        label: 'Type de correction',
+        lenient: 'Littéraire (Indulgent)',
+        normal: 'Standard',
+        strict: 'Littéraire (Strict)',
+        scientific: 'Scientifique (Objectif & Précis)',
       },
       sensitivity: {
         label: 'Sensibilité du détecteur de plagiat',
@@ -414,16 +415,17 @@ export const translations = {
         title: 'Advanced Grading Settings',
         helpTitle: 'What do these settings mean?',
         help: {
-            strictness: 'Determines how precise the grader is. "Lenient" focuses on general understanding, while "Strict" deducts points for the smallest errors.',
+            strictness: '"Scientific (Objective)" mode overrides subjective levels and enforces exact precision. "Lenient" focuses on general understanding, while "Strict" deducts points for the smallest errors.',
             sensitivity: 'Controls how suspicious the grader is. "Low" requires significant overlap, while "High" might detect similarities in phrasing or ideas.',
             instructions: 'You can guide the grader to focus on specific aspects, such as "ignore spelling mistakes" or "focus on the method, not the final result".',
         },
       },
       strictness: {
-        label: 'Grading Strictness',
-        lenient: 'Lenient',
-        normal: 'Normal',
-        strict: 'Strict',
+        label: 'Grading Mode',
+        lenient: 'Humanities (Lenient)',
+        normal: 'Standard',
+        strict: 'Humanities (Strict)',
+        scientific: 'Scientific (Objective & Precise)',
       },
       sensitivity: {
         label: 'Plagiarism Detector Sensitivity',
@@ -641,16 +643,17 @@ export const translations = {
         title: 'إعدادات التقييم المتقدمة',
         helpTitle: 'ماذا تعني هذه الإعدادات؟',
         help: {
-            strictness: 'تحدد مدى دقة المصحح. "متساهل" يركز على الفهم العام، بينما "صارم" يخصم النقاط على أصغر الأخطاء.',
+            strictness: 'الوضع "علمي (موضوعي)" يلغي المستويات الذاتية ويفرض الدقة التامة. "متساهل" يركز على الفهم العام، بينما "صارم" يخصم النقاط على أصغر الأخطاء.',
             sensitivity: 'تتحكم في مدى شك المصحح. "منخفضة" تتطلب تطابقًا كبيرًا، بينما "عالية" قد تكتشف تشابهات في الصياغة أو الأفكار.',
             instructions: 'يمكنك توجيه المصحح للتركيز على جوانب محددة، مثل "تجاهل الأخطاء الإملائية" أو "التركيز على المنهجية وليس النتيجة النهائية".',
         },
       },
       strictness: {
-        label: 'صرامة التقييم',
-        lenient: 'متساهل',
-        normal: 'عادي',
-        strict: 'صارم',
+        label: 'نوع التصحيح',
+        lenient: 'أدبي (متساهل)',
+        normal: 'قياسي',
+        strict: 'أدبي (صارم)',
+        scientific: 'علمي (موضوعي ودقيق)',
       },
       sensitivity: {
         label: 'حساسية كاشف الانتحال',
@@ -682,3 +685,4 @@ export const translations = {
     },
   },
 };
+

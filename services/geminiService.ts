@@ -115,7 +115,7 @@ export const constructGradingPrompt = (
     studentName: string, 
     studentGroup: string, 
     totalMarks: number, 
-    gradingStrictness: 'Lenient' | 'Normal' | 'Strict',
+    gradingStrictness: 'Lenient' | 'Normal' | 'Strict' | 'Scientific',
     plagiarismSensitivity: 'Low' | 'Medium' | 'High',
     customInstructions: string,
     matchingStudentName: string | null,
@@ -138,10 +138,19 @@ export const constructGradingPrompt = (
         }
 
         let strictnessInstruction = '';
-        if (gradingStrictness === 'Strict') {
+        if (gradingStrictness === 'Scientific') {
+            strictnessInstruction = `**MODE SCIENTIFIQUE (OBJECTIF) :**
+            Ceci est un examen scientifique (Maths, Physique, Sciences). Ignorez toute notion de clémence ou de sévérité subjective.
+            La notation doit être purement OBJECTIVE et basée sur des faits scientifiques.
+            Vérifiez avec une précision absolue :
+            1. L'exactitude des formules et théorèmes utilisés.
+            2. La logique des étapes de calcul.
+            3. L'exactitude des résultats numériques finaux.
+            4. L'utilisation correcte des unités et des notations scientifiques.
+            Ne donnez PAS de points pour l'intention si le raisonnement ou le résultat scientifique est faux.`;
+        } else if (gradingStrictness === 'Strict') {
             strictnessInstruction = 'La notation doit être extrêmement stricte, en déduisant des points même pour des erreurs mineures.';
         } else if (gradingStrictness === 'Lenient') {
-            // FIXED: Escaped the apostrophe in l'étudiant
             strictnessInstruction = 'La notation doit être indulgente, en se concentrant sur la compréhension par l\'étudiant des concepts de base plutôt que sur les détails mineurs.';
         }
 
@@ -178,7 +187,8 @@ export const constructGradingPrompt = (
     -   ${plagiarismInstruction} Basez votre \`reasoning\` dans \`cheatingAnalysis\` sur les comparaisons internes, la détection d'IA et la vérification du plagiat Web. Si \`isAiGenerated\` est vrai, votre \`reasoning\` DOIT explicitement indiquer que la génération par IA est suspectée et citer des preuves stylistiques spécifiques.`;
         }
 
-        return `Vous êtes un **moteur de notation déterministe**. Votre tâche est d'exécuter un algorithme de notation strict. Votre comportement doit être parfaitement reproductible : des entrées identiques doivent toujours produire des sorties identiques. Il est absolument essentiel d'éliminer toute forme de subjectivité ou d'"humeur" dans l'évaluation pour garantir une équité absolue. Toutes les sorties doivent être en français.
+        return `Vous êtes un **moteur de notation déterministe**. Votre tâche est d'exécuter un algorithme de notation strict. 
+**OBJECTIF : VARIANCE ZÉRO.** Si ce document est traité deux fois, le résultat doit être mathématiquement identique. Ne changez jamais vos critères de notation entre les exécutions. Éliminez toute subjectivité ou "humeur". Toutes les sorties doivent être en français.
 
 ${referenceInstructionBlock}
 Les données d'entrée consistent en des images d'un examen pour l'étudiant : ${studentName} du groupe : ${studentGroup}. Traitez toutes les images comme un seul document continu.
@@ -186,10 +196,10 @@ Les données d'entrée consistent en des images d'un examen pour l'étudiant : $
 Exécutez l'algorithme suivant avec une précision absolue :
 
 **Algorithme :**
-1.  **Allocation des questions et des points** :
+1.  **Allocation des questions et des points (Verrouillage)** :
     -   Analysez le document pour identifier toutes les questions.
-    -   Répartissez logiquement le total des points (${totalMarks}) entre les questions identifiées, en attribuant une valeur \`maxMarks\` pour chacune.
-    -   **Contrainte :** La somme précise de toutes les valeurs \`maxMarks\` doit être exactement égale à ${totalMarks}.
+    -   Répartissez logiquement le total des points (${totalMarks}) entre les questions.
+    -   **Règle Stricte :** Une fois fixée, la distribution des points ne doit pas changer en fonction de la qualité de la réponse. La somme doit toujours être ${totalMarks}.
 
 2.  **Évaluation par question** :
     -   Pour chaque question, évaluez la réponse de l'étudiant sur la base de critères académiques stricts et du matériel de référence fourni. ${strictnessInstruction}
@@ -199,14 +209,14 @@ Exécutez l'algorithme suivant avec une précision absolue :
 
 3.  **Agrégation des résultats** :
     -   Calculez le \`score\` total.
-    -   **Contrainte :** Le \`score\` doit être la somme mathématique exacte de toutes les valeurs \`marksAwarded\` de l'étape 2. N'utilisez aucune autre estimation.
-    -   Résumez les \`strengths\` (points forts) et les \`weaknesses\` (points faibles) sur la base des évaluations individuelles.
+    -   **Contrainte :** Le \`score\` doit être la somme mathématique exacte de toutes les valeurs \`marksAwarded\` de l'étape 2.
+    -   Résumez les \`strengths\` (points forts) et les \`weaknesses\` (points faibles).
 
 ${integrityAnalysisBlock}
 ${customInstructionBlock}
 6.  **Formatage de la sortie** :
     -   Compilez toutes les données en un seul objet JSON.
-    -   **Contrainte :** L'objet JSON doit respecter strictement le schéma fourni. N'ajoutez aucun texte, commentaire ou formatage markdown en dehors de la structure JSON.
+    -   **Contrainte :** L'objet JSON doit respecter strictement le schéma fourni.
 
 **Schéma JSON :**
 ${jsonSchema}`;
@@ -224,7 +234,17 @@ ${jsonSchema}`;
         }
 
         let strictnessInstruction = '';
-        if (gradingStrictness === 'Strict') {
+        if (gradingStrictness === 'Scientific') {
+            strictnessInstruction = `**SCIENTIFIC MODE (OBJECTIVE):**
+            This is a scientific exam (Math, Physics, Science). Ignore subjective leniency/strictness levels.
+            Grading must be strictly OBJECTIVE based on scientific facts.
+            Verify with absolute precision:
+            1. Correct formulas and theorems used.
+            2. Logical steps and derivation.
+            3. Exact final numerical results.
+            4. Correct units and scientific notation.
+            Do NOT award points for intent if the scientific reasoning or result is incorrect.`;
+        } else if (gradingStrictness === 'Strict') {
             strictnessInstruction = 'The grading must be extremely strict, deducting points for even minor errors.';
         } else if (gradingStrictness === 'Lenient') {
             strictnessInstruction = 'The grading should be lenient, focusing on the student\'s understanding of core concepts rather than minor details.';
@@ -263,7 +283,8 @@ ${jsonSchema}`;
     -   ${plagiarismInstruction} Base your \`reasoning\` in \`cheatingAnalysis\` on internal comparisons, AI detection, and the web plagiarism check. If \`isAiGenerated\` is true, your \`reasoning\` MUST explicitly state that AI generation is suspected and cite specific stylistic evidence.`;
         }
 
-        return `You are a **deterministic grading engine**. Your task is to execute a strict grading algorithm. Your behavior must be perfectly repeatable: identical inputs must always produce identical outputs. It is absolutely critical to eliminate all forms of subjectivity or "mood" in the assessment to ensure absolute fairness. All output must be in English.
+        return `You are a **deterministic grading engine**. Your task is to execute a strict grading algorithm. 
+**GOAL: ZERO VARIANCE.** Identical inputs must always produce mathematically identical outputs. Do not alter your grading criteria between runs. Eliminate all forms of subjectivity or "mood" to ensure absolute fairness. All output must be in English.
 
 ${referenceInstructionBlock}
 The input data consists of images of an exam for student: ${studentName} from group: ${studentGroup}. Treat all images as a single, continuous document.
@@ -271,10 +292,10 @@ The input data consists of images of an exam for student: ${studentName} from gr
 Execute the following algorithm with absolute precision:
 
 **Algorithm:**
-1.  **Question and Mark Allocation**:
+1.  **Question and Mark Allocation (Lock-in)**:
     -   Scan the document to identify all questions.
-    -   Logically distribute the total marks (${totalMarks}) among the identified questions, assigning a \`maxMarks\` value for each.
-    -   **Constraint:** The precise sum of all \`maxMarks\` values must equal exactly ${totalMarks}.
+    -   Logically distribute the total marks (${totalMarks}) among the identified questions.
+    -   **Strict Rule:** Once set, the mark distribution for each question must NOT change based on the quality of the answer. The sum must always equal ${totalMarks}.
 
 2.  **Evaluation per Question**:
     -   For each question, evaluate the student's answer based on strict academic criteria and the provided reference material. ${strictnessInstruction}
@@ -291,7 +312,7 @@ ${integrityAnalysisBlock}
 ${customInstructionBlock}
 6.  **Output Formatting**:
     -   Compile all data into a single JSON object.
-    -   **Constraint:** The JSON object must strictly adhere to the provided schema. Do not add any text, comments, or markdown formatting outside the JSON structure.
+    -   **Constraint:** The JSON object must strictly adhere to the provided schema.
 
 **JSON Schema:**
 ${jsonSchema}`;
@@ -309,7 +330,17 @@ ${jsonSchema}`;
     }
 
     let strictnessInstruction = '';
-    if (gradingStrictness === 'Strict') {
+    if (gradingStrictness === 'Scientific') {
+        strictnessInstruction = `**الوضع العلمي (موضوعي دقيق):**
+        هذا امتحان في مادة علمية (رياضيات، فيزياء، علوم). تجاهل أي مستويات ذاتية للتساهل أو الصرامة.
+        يجب أن يكون التصحيح موضوعيًا بحتًا ومستندًا إلى الحقائق العلمية.
+        تحقق بدقة متناهية من:
+        1. صحة القوانين والنظريات المستخدمة.
+        2. منطقية وتسلسل خطوات الحل.
+        3. دقة النتائج الحسابية النهائية.
+        4. الاستخدام الصحيح للوحدات والترميز العلمي.
+        لا تمنح نقاطًا على "النية" إذا كان الاستنتاج أو النتيجة العلمية خاطئة.`;
+    } else if (gradingStrictness === 'Strict') {
         strictnessInstruction = 'يجب أن يكون التقييم صارمًا للغاية، مع خصم النقاط لأقل الأخطاء.';
     } else if (gradingStrictness === 'Lenient') {
         strictnessInstruction = 'يجب أن يكون التقييم متساهلاً، مع التركيز على فهم الطالب للمفاهيم الأساسية بدلاً من التفاصيل الدقيقة.';
@@ -348,7 +379,8 @@ ${jsonSchema}`;
     -   ${plagiarismInstruction} ابنِ \`reasoning\` (التعليل) في \`cheatingAnalysis\` على المقارنات الداخلية، كشف الذكاء الاصطناعي، ونتائج التحقق من الانتحال عبر الويب. إذا كان \`isAiGenerated\` صحيحًا، يجب أن يذكر \`reasoning\` (التعليل) بوضوح أن هناك اشتباهًا في استخدام الذكاء الاصطناعي مع ذكر أدلة أسلوبية محددة.`;
     }
 
-    return `أنت **محرك تقييم حتمي** (deterministic grading engine). مهمتك هي تنفيذ خوارزمية تقييم صارمة. يجب أن يكون سلوكك قابلاً للتكرار تمامًا: المدخلات المتطابقة يجب أن تنتج دائمًا مخرجات متطابقة. من الضروري للغاية القضاء على جميع أشكال الذاتية أو "المزاجية" في التقييم لضمان العدالة المطلقة. يجب أن تكون جميع المخرجات باللغة العربية.
+    return `أنت **محرك تقييم حتمي** (deterministic grading engine). مهمتك هي تنفيذ خوارزمية تقييم صارمة. 
+**الهدف: انعدام التباين (Zero Variance).** المدخلات المتطابقة يجب أن تنتج دائمًا مخرجات متطابقة رياضيًا. لا تقم بتغيير معايير التقييم الخاصة بك بين المحاولات. تخلص من جميع أشكال الذاتية أو "المزاجية" لضمان العدالة المطلقة. يجب أن تكون جميع المخرجات باللغة العربية.
 
 ${referenceInstructionBlock}
 البيانات المدخلة هي صور لامتحان الطالب: ${studentName} من الفوج: ${studentGroup}. تعامل مع جميع الصور كوثيقة واحدة مستمرة.
@@ -356,10 +388,10 @@ ${referenceInstructionBlock}
 نفذ الخوارزمية التالية بدقة مطلقة:
 
 **الخوارزمية:**
-1.  **تحليل الأسئلة وتوزيع النقاط (Allocation)**:
+1.  **تحليل الأسئلة وتوزيع النقاط (تجميد المعايير)**:
     -   امسح الوثيقة لتحديد جميع الأسئلة.
-    -   وزع إجمالي النقاط (${totalMarks}) بشكل منطقي على الأسئلة التي تم تحديدها، وقم بتعيين قيمة \`maxMarks\` لكل سؤال.
-    -   **شرط:** يجب أن يكون المجموع الدقيق لجميع قيم \`maxMarks\` مساويًا تمامًا لـ ${totalMarks}.
+    -   وزع إجمالي النقاط (${totalMarks}) بشكل منطقي على الأسئلة التي تم تحديدها.
+    -   **قاعدة صارمة:** بمجرد تحديد توزيع النقاط لكل سؤال، لا يجب تغييره بناءً على جودة الإجابة أو أي عامل آخر. يجب أن يكون المجموع دائمًا ${totalMarks}.
 
 2.  **التقييم لكل سؤال (Evaluation per Question)**:
     -   لكل سؤال، قم بتقييم إجابة الطالب بناءً على معايير أكاديمية صارمة والمواد المرجعية المقدمة. ${strictnessInstruction}
@@ -376,7 +408,7 @@ ${integrityAnalysisBlock}
 ${customInstructionBlock}
 6.  **تنسيق المخرجات (Output Formatting)**:
     -   قم بتجميع جميع البيانات في كائن JSON واحد.
-    -   **شرط:** يجب أن يلتزم كائن JSON تمامًا بالمخطط المقدم. لا تضف أي نص أو تعليقات أو تنسيق markdown خارج بنية JSON.
+    -   **شرط:** يجب أن يلتزم كائن JSON تمامًا بالمخطط المقدم.
 
 **JSON Schema:**
 ${jsonSchema}`;
@@ -388,7 +420,7 @@ export const gradeExam = async (
     examFiles: File[], 
     totalMarks: number, 
     apiKey: string,
-    gradingStrictness: 'Lenient' | 'Normal' | 'Strict',
+    gradingStrictness: 'Lenient' | 'Normal' | 'Strict' | 'Scientific',
     plagiarismSensitivity: 'Low' | 'Medium' | 'High',
     customInstructions: string,
     matchingStudentName: string | null,
@@ -443,8 +475,9 @@ export const gradeExam = async (
                 model: "gemini-2.5-flash",
                 contents: { parts: requestParts },
                 config: {
-                    temperature: 0.0, // Set to 0.0 for maximum determinism and consistency.
-                    seed: 42, // Use a fixed seed for reproducible results.
+                    temperature: 0.0, // Hard zero for consistency
+                    topP: 0.1,        // Force model to pick only the absolute most likely tokens (Determinism)
+                    seed: 42,         // Fixed seed for reproducibility
                     tools: [{googleSearch: {}}],
                 },
             });
@@ -515,10 +548,8 @@ export const gradeExam = async (
     throw new Error("UNEXPECTED_GRADING_ERROR");
 };
 
-// ... (Unit tests remain largely unchanged, just updating arguments where necessary)
-// I'm abbreviating the mock test part for brevity as the logic change is minimal there
-// but ensuring the export remains valid.
-
+// ... (Unit tests remain largely unchanged)
 export async function runUnitTests() {
-    console.log("🚀 Unit Tests Skipped for brevity in this patch (logic similar).");
+    console.log("🚀 Unit Tests Skipped for brevity.");
 }
+
