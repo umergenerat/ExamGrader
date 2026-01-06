@@ -1,121 +1,153 @@
-
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-    <title>AI Exam Grader</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      // Enable class-based dark mode
-      tailwind.config = {
-        darkMode: 'class',
-        theme: {
-            extend: {
-                fontFamily: {
-                    sans: ['Inter', 'sans-serif'],
-                    arabic: ['Cairo', 'sans-serif'],
-                }
-            }
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>AI Exam Grader</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    // Enable class-based dark mode
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            arabic: ['Cairo', 'sans-serif'],
+          }
         }
       }
-    </script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    
-    <!-- PWA Setup -->
-    <link rel="manifest" href="/manifest.json">
-    <!-- Main Favicon -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImciIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiM0ZjQ2ZTUiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiM3YzNhZWQiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgcng9IjEyOCIgZmlsbD0idXJsKCNnKSIvPjxwYXRoIGQ9Ik0xMzMgMjcwbDgwIDgwIDE3MC0xNzAiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSI2MCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBmaWxsPSJub25lIi8+PHBhdGggZD0iTTQwMCAxMDBsMjAgNDUgNDUgMjAtNDUgMjAtMjAgNDUtMjAtNDUtNDUtMjAgNDUtMjB6IiBmaWxsPSIjZmNkMzRkIi8+PC9zdmc+">
-    
-    <!-- Android / Chrome -->
-    <meta name="theme-color" content="#4f46e5">
-    <meta name="mobile-web-app-capable" content="yes">
-    
-    <!-- iOS / Safari -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="AI Grader">
-    <link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImciIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiM0ZjQ2ZTUiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiM3YzNhZWQiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgcng9IjEyOCIgZmlsbD0idXJsKCNnKSIvPjxwYXRoIGQ9Ik0xMzMgMjcwbDgwIDgwIDE3MC0xNzAiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSI2MCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBmaWxsPSJub25lIi8+PHBhdGggZD0iTTQwMCAxMDBsMjAgNDUgNDUgMjAtNDUgMjAtMjAgNDUtMjAtNDUtNDUtMjAgNDUtMjB6IiBmaWxsPSIjZmNkMzRkIi8+PC9zdmc+">
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
 
-    <style>
-      html {
-        -webkit-tap-highlight-color: transparent;
-        scroll-behavior: smooth;
-        /* Prevent pull-to-refresh on Android to feel more native */
-        overscroll-behavior-y: none;
-      }
-      body {
-        /* Prevent bounce effect */
-        overscroll-behavior-y: none;
-      }
-      html[lang="ar"] body {
-        font-family: 'Cairo', sans-serif;
-      }
-      html[lang="en"] body, html[lang="fr"] body {
-        font-family: 'Inter', sans-serif;
-      }
-      
-      /* Smooth transitions for theme switching */
-      body, .bg-white, .bg-gray-50, .bg-gray-100, .bg-gray-800, .bg-gray-900 {
-         transition-property: background-color, border-color, color, fill, stroke;
-         transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-         transition-duration: 300ms;
-      }
+  <!-- PWA: Manifest and service worker injected by vite-plugin-pwa -->
+  <link rel="icon" type="image/png" href="/pwa-192x192.png">
 
-      /* Animations */
-      @keyframes fadeIn {
-        from { opacity: 0; }
-        to { opacity: 1; }
-      }
-      @keyframes fadeInUp {
-        from { opacity: 0; transform: translateY(10px); }
-        to { opacity: 1; transform: translateY(0); }
-      }
-      .animate-fade-in {
-        animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-      }
-      .animate-fade-in-up {
-        animation: fadeInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-      }
-      
-      /* Custom Scrollbar for Webkit */
-      ::-webkit-scrollbar {
-        width: 8px;
-        height: 8px;
-      }
-      ::-webkit-scrollbar-track {
-        background: transparent; 
-      }
-      ::-webkit-scrollbar-thumb {
-        background: #cbd5e1; 
-        border-radius: 4px;
-      }
-      ::-webkit-scrollbar-thumb:hover {
-        background: #94a3b8; 
-      }
-      .dark ::-webkit-scrollbar-thumb {
-        background: #475569; 
-      }
-      .dark ::-webkit-scrollbar-thumb:hover {
-        background: #64748b; 
+  <!-- Android / Chrome -->
+  <meta name="theme-color" content="#4f46e5">
+  <meta name="mobile-web-app-capable" content="yes">
+
+  <!-- iOS / Safari -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="AI Grader">
+  <link rel="apple-touch-icon"
+    href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImciIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiM0ZjQ2ZTUiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiM3YzNhZWQiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgcng9IjEyOCIgZmlsbD0idXJsKCNnKSIvPjxwYXRoIGQ9Ik0xMzMgMjcwbDgwIDgwIDE3MC0xNzAiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSI2MCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBmaWxsPSJub25lIi8+PHBhdGggZD0iTTQwMCAxMDBsMjAgNDUgNDUgMjAtNDUgMjAtMjAgNDUtMjAtNDUtNDUtMjAgNDUtMjB6IiBmaWxsPSIjZmNkMzRkIi8+PC9zdmc+">
+
+  <style>
+    html {
+      -webkit-tap-highlight-color: transparent;
+      scroll-behavior: smooth;
+      /* Prevent pull-to-refresh on Android to feel more native */
+      overscroll-behavior-y: none;
+    }
+
+    body {
+      /* Prevent bounce effect */
+      overscroll-behavior-y: none;
+    }
+
+    html[lang="ar"] body {
+      font-family: 'Cairo', sans-serif;
+    }
+
+    html[lang="en"] body,
+    html[lang="fr"] body {
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* Smooth transitions for theme switching */
+    body,
+    .bg-white,
+    .bg-gray-50,
+    .bg-gray-100,
+    .bg-gray-800,
+    .bg-gray-900 {
+      transition-property: background-color, border-color, color, fill, stroke;
+      transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+      transition-duration: 300ms;
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
       }
 
-      /* Hide scrollbar utility */
-      .no-scrollbar::-webkit-scrollbar {
-          display: none;
+      to {
+        opacity: 1;
       }
-      .no-scrollbar {
-          -ms-overflow-style: none;
-          scrollbar-width: none;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
       }
-      
-      /* Camera Safe Area */
-      .safe-area-bottom {
-          padding-bottom: env(safe-area-inset-bottom, 20px);
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
       }
-    </style>
+    }
+
+    .animate-fade-in {
+      animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+
+    .animate-fade-in-up {
+      animation: fadeInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+
+    /* Custom Scrollbar for Webkit */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+
+    .dark ::-webkit-scrollbar-thumb {
+      background: #475569;
+    }
+
+    .dark ::-webkit-scrollbar-thumb:hover {
+      background: #64748b;
+    }
+
+    /* Hide scrollbar utility */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    /* Camera Safe Area */
+    .safe-area-bottom {
+      padding-bottom: env(safe-area-inset-bottom, 20px);
+    }
+  </style>
   <script type="importmap">
 {
   "imports": {
@@ -132,25 +164,17 @@
 }
 </script>
 </head>
-  <body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200 antialiased selection:bg-blue-100 dark:selection:bg-blue-900 selection:text-blue-900 dark:selection:text-blue-100">
-    <div id="root"></div>
-    <script type="module" src="/index.tsx"></script>
-    <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/sw.js').then(registration => {
-            console.log('Service Worker registered: ', registration);
-          }).catch(registrationError => {
-            console.log('Service Worker registration failed: ', registrationError);
-          });
-        });
-      }
-    </script>
-    <noscript>
-      <div style="text-align: center; padding: 20px; color: #666;">
-        <p>JavaScript is required to use this application.</p>
-      </div>
-    </noscript>
-  </body>
-</html>
 
+<body
+  class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200 antialiased selection:bg-blue-100 dark:selection:bg-blue-900 selection:text-blue-900 dark:selection:text-blue-100">
+  <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+
+  <noscript>
+    <div style="text-align: center; padding: 20px; color: #666;">
+      <p>JavaScript is required to use this application.</p>
+    </div>
+  </noscript>
+</body>
+
+</html>
