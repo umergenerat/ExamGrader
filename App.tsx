@@ -160,6 +160,16 @@ const App: React.FC = () => {
                     setArchivedResults(parsed);
                 }
             }
+            // Load persisted plagiarism hashes for cross-session cheating detection
+            const storedHashes = localStorage.getItem('submissionHashes');
+            if (storedHashes) {
+                try {
+                    const parsedHashes = JSON.parse(storedHashes);
+                    if (parsedHashes && typeof parsedHashes === 'object') {
+                        setSessionSubmissions(parsedHashes);
+                    }
+                } catch (e) { console.warn('Failed to parse stored hashes', e); }
+            }
              const dismissed = localStorage.getItem('pwaInstallDismissed') === 'true';
             setPwaInstallDismissed(dismissed);
         } catch (e) {
@@ -380,7 +390,9 @@ const App: React.FC = () => {
                 if (existingSubs.some(s => s.studentName === studentName && s.contentHash === contentHash)) {
                     return prev;
                 }
-                return { ...prev, [studentGroup]: [...existingSubs, currentSub] };
+                const updated = { ...prev, [studentGroup]: [...existingSubs, currentSub] };
+                localStorage.setItem('submissionHashes', JSON.stringify(updated));
+                return updated;
             });
 
             if (matchingStudentName) {
@@ -510,6 +522,7 @@ const App: React.FC = () => {
         if (window.confirm(t('archive.clearConfirmation'))) {
             setArchivedResults([]);
             localStorage.removeItem('archivedExams');
+            localStorage.removeItem('submissionHashes');
             setSessionSubmissions({});
             setExamReferences({});
         }

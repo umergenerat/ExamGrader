@@ -1,8 +1,8 @@
 
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useMemo } from 'react';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
-import type { GradingResult, WebPlagiarismSource } from '../types';
+import type { GradingResult, WebPlagiarismSource, BloomLevel, PerformanceLevel } from '../types';
 import { CheckCircleIcon, XCircleIcon, AlertTriangleIcon, DownloadIcon, RefreshIcon, ShareIcon, CheckIcon } from './icons';
 import { useAppContext } from '../context/AppContext';
 
@@ -13,6 +13,34 @@ interface ResultsDisplayProps {
   onRestore?: () => void;
 }
 
+const getGradeLabel = (percentage: number, t: (key: string) => string): { label: string; color: string } => {
+  if (percentage >= 90) return { label: t('results.grade.excellent'), color: 'text-emerald-700 bg-emerald-50 border-emerald-200 dark:text-emerald-300 dark:bg-emerald-900/30 dark:border-emerald-800' };
+  if (percentage >= 80) return { label: t('results.grade.veryGood'), color: 'text-green-700 bg-green-50 border-green-200 dark:text-green-300 dark:bg-green-900/30 dark:border-green-800' };
+  if (percentage >= 70) return { label: t('results.grade.good'), color: 'text-blue-700 bg-blue-50 border-blue-200 dark:text-blue-300 dark:bg-blue-900/30 dark:border-blue-800' };
+  if (percentage >= 60) return { label: t('results.grade.aboveAverage'), color: 'text-cyan-700 bg-cyan-50 border-cyan-200 dark:text-cyan-300 dark:bg-cyan-900/30 dark:border-cyan-800' };
+  if (percentage >= 50) return { label: t('results.grade.average'), color: 'text-yellow-700 bg-yellow-50 border-yellow-200 dark:text-yellow-300 dark:bg-yellow-900/30 dark:border-yellow-800' };
+  if (percentage >= 40) return { label: t('results.grade.belowAverage'), color: 'text-orange-700 bg-orange-50 border-orange-200 dark:text-orange-300 dark:bg-orange-900/30 dark:border-orange-800' };
+  if (percentage >= 25) return { label: t('results.grade.weak'), color: 'text-red-600 bg-red-50 border-red-200 dark:text-red-300 dark:bg-red-900/30 dark:border-red-800' };
+  return { label: t('results.grade.veryWeak'), color: 'text-red-800 bg-red-100 border-red-300 dark:text-red-200 dark:bg-red-900/40 dark:border-red-700' };
+};
+
+const bloomConfig: Record<BloomLevel, { emoji: string; colorClass: string }> = {
+  knowledge: { emoji: '📝', colorClass: 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300' },
+  comprehension: { emoji: '💡', colorClass: 'bg-sky-100 text-sky-700 dark:bg-sky-900/40 dark:text-sky-300' },
+  application: { emoji: '🔧', colorClass: 'bg-teal-100 text-teal-700 dark:bg-teal-900/40 dark:text-teal-300' },
+  analysis: { emoji: '🔬', colorClass: 'bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300' },
+  synthesis: { emoji: '🧩', colorClass: 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-300' },
+  evaluation: { emoji: '⚖️', colorClass: 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300' },
+};
+
+const perfConfig: Record<PerformanceLevel, { colorClass: string }> = {
+  excellent: { colorClass: 'bg-emerald-500' },
+  good: { colorClass: 'bg-green-500' },
+  acceptable: { colorClass: 'bg-yellow-500' },
+  insufficient: { colorClass: 'bg-orange-500' },
+  absent: { colorClass: 'bg-red-500' },
+};
+
 const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ result, graderName, notification, onRestore }) => {
   const [isExporting, setIsExporting] = useState(false);
   const [isSharing, setIsSharing] = useState(false);
@@ -22,6 +50,8 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ result, graderName, not
   const { t, language } = useAppContext();
 
   const scorePercentage = (result.score / result.totalMarks) * 100;
+  const gradeInfo = useMemo(() => getGradeLabel(scorePercentage, t), [scorePercentage, t]);
+  const confidenceScore = result.confidenceScore ?? 75;
 
   const renderAnswerWithPlagiarism = (answer: string, webSources?: WebPlagiarismSource[]): React.ReactNode => {
     if (!webSources || webSources.length === 0) {
@@ -230,6 +260,19 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ result, graderName, not
                          </div>
                      </div>
                 </div>
+                {/* Grade Scale Badge & Confidence */}
+                <div className="flex flex-wrap items-center gap-3 mt-4 w-full z-10">
+                    <span className={`px-4 py-1.5 rounded-full text-sm font-bold border ${gradeInfo.color}`}>{gradeInfo.label}</span>
+                    <div className="flex items-center gap-2 px-3 py-1.5 bg-gray-50 dark:bg-gray-700/50 rounded-full" title={t('results.confidenceTitle')}>
+                        <div className="w-16 h-1.5 bg-gray-200 dark:bg-gray-600 rounded-full overflow-hidden">
+                            <div className={`h-full rounded-full transition-all duration-700 ${confidenceScore >= 80 ? 'bg-green-500' : confidenceScore >= 60 ? 'bg-yellow-500' : 'bg-red-500'}`} style={{ width: `${confidenceScore}%` }}></div>
+                        </div>
+                        <span className="text-xs font-bold text-gray-500 dark:text-gray-400">{t('results.confidence')}: {confidenceScore}%</span>
+                    </div>
+                </div>
+                {result.gradingNotes && (
+                    <p className="mt-3 text-xs text-gray-500 dark:text-gray-400 italic bg-gray-50 dark:bg-gray-700/30 px-3 py-2 rounded-lg w-full z-10">📋 {result.gradingNotes}</p>
+                )}
             </div>
 
             {/* Integrity Card */}
@@ -313,10 +356,26 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ result, graderName, not
             <div className="space-y-4 sm:space-y-6">
               {result.detailedFeedback.map((item, index) => (
                 <div key={index} className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden transition-all hover:shadow-md">
-                  <div className="bg-gray-50 dark:bg-gray-700/30 px-4 sm:px-6 py-4 border-b border-gray-100 dark:border-gray-700 flex justify-between items-start gap-4">
-                    <h4 className="font-bold text-gray-900 dark:text-white text-base sm:text-lg flex-1 leading-snug">{t('results.question')} {index + 1}: <span className="text-gray-600 dark:text-gray-300 font-medium text-sm sm:text-base ml-2">{item.question}</span></h4>
-                    <div className="flex-shrink-0 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 px-3 py-1 rounded-lg font-bold text-gray-900 dark:text-white shadow-sm text-sm">
-                        {item.marksAwarded} <span className="text-gray-400 text-xs font-normal">/ {item.maxMarks}</span>
+                  <div className="bg-gray-50 dark:bg-gray-700/30 px-4 sm:px-6 py-4 border-b border-gray-100 dark:border-gray-700">
+                    <div className="flex justify-between items-start gap-4">
+                      <h4 className="font-bold text-gray-900 dark:text-white text-base sm:text-lg flex-1 leading-snug">{t('results.question')} {index + 1}: <span className="text-gray-600 dark:text-gray-300 font-medium text-sm sm:text-base ml-2">{item.question}</span></h4>
+                      <div className="flex-shrink-0 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 px-3 py-1 rounded-lg font-bold text-gray-900 dark:text-white shadow-sm text-sm">
+                          {item.marksAwarded} <span className="text-gray-400 text-xs font-normal">/ {item.maxMarks}</span>
+                      </div>
+                    </div>
+                    {/* Academic Badges */}
+                    <div className="flex flex-wrap items-center gap-2 mt-3">
+                      {item.bloomLevel && bloomConfig[item.bloomLevel] && (
+                        <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold ${bloomConfig[item.bloomLevel].colorClass}`}>
+                          {bloomConfig[item.bloomLevel].emoji} {t(`results.bloom.${item.bloomLevel}`)}
+                        </span>
+                      )}
+                      {item.performanceLevel && perfConfig[item.performanceLevel] && (
+                        <span className="inline-flex items-center gap-1.5 text-[11px] font-bold text-gray-600 dark:text-gray-300">
+                          <span className={`w-2 h-2 rounded-full ${perfConfig[item.performanceLevel].colorClass}`}></span>
+                          {t(`results.performance.${item.performanceLevel}`)}
+                        </span>
+                      )}
                     </div>
                   </div>
                   
@@ -388,6 +447,13 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ result, graderName, not
                      <div className="flex items-baseline gap-2">
                         <span className="text-4xl font-black text-black">{result.score}</span>
                         <span className="text-xl font-medium text-gray-600">/ {result.totalMarks}</span>
+                        <span className="ml-auto text-lg font-bold border-2 border-black px-3 py-1 uppercase">{gradeInfo.label}</span>
+                     </div>
+                     <div className="mt-3 flex items-center gap-2">
+                        <span className="text-[10px] font-bold text-gray-500 uppercase">{t('results.confidence')}: {confidenceScore}%</span>
+                        <div className="flex-grow h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                            <div className="h-full bg-black" style={{ width: `${confidenceScore}%` }}></div>
+                        </div>
                      </div>
                  </div>
                  <div className={`flex-1 p-4 rounded border flex flex-col justify-center items-center text-center ${result.cheatingAnalysis.detected ? 'bg-red-50 border-red-300' : 'bg-gray-50 border-gray-300'}`}>
@@ -415,7 +481,21 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ result, graderName, not
                             <tr key={idx} className="border-b border-gray-300">
                                 <td className="py-3 px-3 align-top font-bold text-gray-500 border-r border-gray-200">{idx + 1}</td>
                                 <td className="py-3 px-3 align-top">
-                                    <div className="mb-2 font-bold text-base text-black underline">{item.question}</div>
+                                    <div className="flex justify-between items-start mb-2">
+                                        <div className="font-bold text-base text-black underline">{item.question}</div>
+                                        <div className="flex gap-2">
+                                            {item.bloomLevel && (
+                                                <span className="text-[10px] font-bold border border-gray-400 px-1.5 rounded uppercase">
+                                                    {t(`results.bloom.${item.bloomLevel}`)}
+                                                </span>
+                                            )}
+                                            {item.performanceLevel && (
+                                                <span className="text-[10px] font-bold border border-gray-400 px-1.5 rounded uppercase">
+                                                    {t(`results.performance.${item.performanceLevel}`)}
+                                                </span>
+                                            )}
+                                        </div>
+                                    </div>
                                     <div className="mb-2 p-2 bg-gray-50 rounded border border-gray-200 text-xs">
                                         <span className="block font-bold text-gray-500 uppercase mb-0.5">{t('results.studentAnswer')}:</span>
                                         {item.studentAnswer}

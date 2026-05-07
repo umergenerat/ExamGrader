@@ -13,6 +13,8 @@ const getGradingSchemaAsJsonString = (totalMarks: number): string => {
   "studentGroup": "string",
   "score": "number (must be the sum of marksAwarded, out of ${totalMarks})",
   "totalMarks": "number (must be ${totalMarks})",
+  "confidenceScore": "number (0-100, your confidence in the overall grading accuracy. 100 = perfect certainty, lower if handwriting is unclear, questions are ambiguous, or reference is missing)",
+  "gradingNotes": "string (brief notes about any difficulties, ambiguities, or assumptions made during grading. Empty string if none.)",
   "cheatingAnalysis": {
     "detected": "boolean",
     "isAiGenerated": "boolean (true if the style strongly suggests AI generation)",
@@ -34,7 +36,9 @@ const getGradingSchemaAsJsonString = (totalMarks: number): string => {
       "idealAnswer": "string",
       "evaluation": "string",
       "marksAwarded": "number",
-      "maxMarks": "number"
+      "maxMarks": "number",
+      "bloomLevel": "string (MUST be exactly one of: 'knowledge', 'comprehension', 'application', 'analysis', 'synthesis', 'evaluation'. Classify the cognitive level this question primarily tests according to Bloom's Taxonomy.)",
+      "performanceLevel": "string (MUST be exactly one of: 'excellent', 'good', 'acceptable', 'insufficient', 'absent'. Rate the student's performance on this specific question using this rubric scale.)"
     }
   ]
 }
@@ -206,6 +210,8 @@ Exécutez l'algorithme suivant avec une précision absolue :
     -   Attribuez un score \`marksAwarded\` pour chaque question.
     -   Formulez une \`idealAnswer\` (réponse idéale) concise.
     -   Rédigez une \`evaluation\` qui justifie objectivement le \`marksAwarded\` attribué.
+    -   **Classification de Bloom :** Classifiez chaque question selon la Taxonomie de Bloom révisée. Attribuez exactement l'un de ces niveaux : \`knowledge\` (mémorisation), \`comprehension\` (compréhension), \`application\` (application), \`analysis\` (analyse), \`synthesis\` (synthèse), \`evaluation\` (évaluation critique).
+    -   **Niveau de performance :** Évaluez la performance de l'étudiant sur chaque question en attribuant exactement l'un de ces niveaux : \`excellent\` (maîtrise complète), \`good\` (bonne maîtrise avec erreurs mineures), \`acceptable\` (compréhension partielle), \`insufficient\` (compréhension très limitée), \`absent\` (pas de réponse ou hors sujet).
 
 3.  **Agrégation des résultats** :
     -   Calculez le \`score\` total.
@@ -214,7 +220,11 @@ Exécutez l'algorithme suivant avec une précision absolue :
 
 ${integrityAnalysisBlock}
 ${customInstructionBlock}
-6.  **Formatage de la sortie** :
+6.  **Indice de confiance et notes** :
+    -   Attribuez un \`confidenceScore\` (0-100) reflétant votre confiance globale dans la notation. Réduisez ce score si : l'écriture est difficile à déchiffrer, les questions sont ambiguës, aucune référence n'est fournie, ou les réponses sont incomplètes.
+    -   Rédigez des \`gradingNotes\` décrivant brièvement les difficultés rencontrées ou les hypothèses faites. Laissez vide si aucune.
+
+7.  **Formatage de la sortie** :
     -   Compilez toutes les données en un seul objet JSON.
     -   **Contrainte :** L'objet JSON doit respecter strictement le schéma fourni.
 
@@ -302,6 +312,8 @@ Execute the following algorithm with absolute precision:
     -   Award a \`marksAwarded\` score for each question.
     -   Formulate a concise \`idealAnswer\`.
     -   Write an \`evaluation\` that objectively justifies the \`marksAwarded\` given.
+    -   **Bloom's Classification:** Classify each question according to Bloom's Revised Taxonomy. Assign exactly one of: \`knowledge\` (recall), \`comprehension\` (understanding), \`application\` (applying), \`analysis\` (analyzing), \`synthesis\` (creating), \`evaluation\` (critical judgment).
+    -   **Performance Level:** Rate the student's performance on each question using exactly one of: \`excellent\` (full mastery), \`good\` (good mastery with minor errors), \`acceptable\` (partial understanding), \`insufficient\` (very limited understanding), \`absent\` (no answer or off-topic).
 
 3.  **Result Aggregation**:
     -   Calculate the total \`score\`.
@@ -310,7 +322,11 @@ Execute the following algorithm with absolute precision:
 
 ${integrityAnalysisBlock}
 ${customInstructionBlock}
-6.  **Output Formatting**:
+6.  **Confidence Score & Notes**:
+    -   Assign a \`confidenceScore\` (0-100) reflecting your overall confidence in the grading accuracy. Lower it if: handwriting is hard to read, questions are ambiguous, no reference is provided, or answers are incomplete.
+    -   Write \`gradingNotes\` briefly describing any difficulties encountered or assumptions made. Leave empty if none.
+
+7.  **Output Formatting**:
     -   Compile all data into a single JSON object.
     -   **Constraint:** The JSON object must strictly adhere to the provided schema.
 
@@ -398,6 +414,8 @@ ${referenceInstructionBlock}
     -   امنح درجة \`marksAwarded\` لكل سؤال.
     -   صغ \`idealAnswer\` (إجابة مثالية) موجزة.
     -   اكتب \`evaluation\` (تقييم) يبرر الدرجة الممنوحة \`marksAwarded\` بشكل موضوعي.
+    -   **تصنيف بلوم:** صنف كل سؤال حسب تصنيف بلوم المُراجع. اختر واحدًا بالضبط من: \`knowledge\` (تذكر/حفظ)، \`comprehension\` (فهم)، \`application\` (تطبيق)، \`analysis\` (تحليل)، \`synthesis\` (تركيب/إبداع)، \`evaluation\` (تقييم نقدي).
+    -   **مستوى الأداء:** قيّم أداء الطالب في كل سؤال باختيار واحد بالضبط من: \`excellent\` (إتقان تام)، \`good\` (إتقان جيد مع أخطاء طفيفة)، \`acceptable\` (فهم جزئي)، \`insufficient\` (فهم محدود جدًا)، \`absent\` (لا إجابة أو خارج الموضوع).
 
 3.  **تجميع النتائج (Aggregation)**:
     -   احسب قيمة \`score\` الإجمالية.
@@ -406,7 +424,11 @@ ${referenceInstructionBlock}
 
 ${integrityAnalysisBlock}
 ${customInstructionBlock}
-6.  **تنسيق المخرجات (Output Formatting)**:
+6.  **مؤشر الثقة والملاحظات**:
+    -   حدد قيمة \`confidenceScore\` (0-100) تعكس مدى ثقتك الإجمالية في دقة التصحيح. اخفض هذه القيمة إذا: كانت الكتابة صعبة القراءة، أو الأسئلة غامضة، أو لم يُقدم مرجع، أو الإجابات غير مكتملة.
+    -   اكتب \`gradingNotes\` تصف بإيجاز أي صعوبات واجهتها أو فرضيات اعتمدتها أثناء التصحيح. اتركها فارغة إذا لم تكن هناك.
+
+7.  **تنسيق المخرجات (Output Formatting)**:
     -   قم بتجميع جميع البيانات في كائن JSON واحد.
     -   **شرط:** يجب أن يلتزم كائن JSON تمامًا بالمخطط المقدم.
 
@@ -508,10 +530,24 @@ export const gradeExam = async (
                  resultJson.score = calculatedScore;
             }
 
+            // Ensure new academic fields have defaults for backward compatibility
+            const validBloomLevels = ['knowledge', 'comprehension', 'application', 'analysis', 'synthesis', 'evaluation'];
+            const validPerformanceLevels = ['excellent', 'good', 'acceptable', 'insufficient', 'absent'];
+            
+            if (resultJson.detailedFeedback) {
+                resultJson.detailedFeedback = resultJson.detailedFeedback.map((item: any) => ({
+                    ...item,
+                    bloomLevel: validBloomLevels.includes(item.bloomLevel) ? item.bloomLevel : 'knowledge',
+                    performanceLevel: validPerformanceLevels.includes(item.performanceLevel) ? item.performanceLevel : 'acceptable',
+                }));
+            }
+
             return {
                 ...resultJson,
                 studentName: studentName,
                 studentGroup: studentGroup,
+                confidenceScore: typeof resultJson.confidenceScore === 'number' ? Math.min(100, Math.max(0, resultJson.confidenceScore)) : 75,
+                gradingNotes: resultJson.gradingNotes || '',
                 id: new Date().toISOString(), // ID uses current processing time
                 timestamp: submissionTimestamp || new Date().toISOString() // Submission time (manual or current)
             } as GradingResult;
