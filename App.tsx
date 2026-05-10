@@ -178,6 +178,13 @@ const App: React.FC = () => {
 
         setIsStandalone(window.matchMedia('(display-mode: standalone)').matches);
 
+        // Listen for changes in display mode (e.g. if the user installs the app)
+        const displayModeQuery = window.matchMedia('(display-mode: standalone)');
+        const handleDisplayModeChange = (e: MediaQueryListEvent) => {
+            setIsStandalone(e.matches);
+        };
+        displayModeQuery.addEventListener('change', handleDisplayModeChange);
+
         const handleBeforeInstallPrompt = (e: Event) => {
             e.preventDefault();
             if (window.matchMedia('(display-mode: standalone)').matches) {
@@ -190,6 +197,7 @@ const App: React.FC = () => {
 
         return () => {
             window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+            displayModeQuery.removeEventListener('change', handleDisplayModeChange);
             examFiles.forEach(f => {
                 if (f.previewUrl) URL.revokeObjectURL(f.previewUrl);
             });
@@ -973,6 +981,24 @@ const App: React.FC = () => {
                                 <button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl shadow-lg shadow-blue-500/20 transition-all transform hover:-translate-y-0.5 active:translate-y-0 text-lg mt-4">
                                     {t('common.next')}
                                 </button>
+
+                                {installPromptEvent && !isStandalone && (
+                                    <div className="pt-4 mt-4 border-t border-gray-100 dark:border-gray-700/50">
+                                        <button 
+                                            type="button"
+                                            onClick={handleInstallApp}
+                                            className="w-full bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400 font-bold py-4 rounded-xl border border-green-200 dark:border-green-800/30 hover:bg-green-100 dark:hover:bg-green-900/40 transition-all flex items-center justify-center gap-3 group"
+                                        >
+                                            <div className="bg-green-500 text-white p-1.5 rounded-lg group-hover:scale-110 transition-transform">
+                                                <InstallDesktopIcon className="w-5 h-5" />
+                                            </div>
+                                            <div className="text-left rtl:text-right">
+                                                <div className="text-sm font-bold leading-none">{t('pwa.installButton')}</div>
+                                                <div className="text-[10px] opacity-70 font-normal mt-1">{t('pwa.description')}</div>
+                                            </div>
+                                        </button>
+                                    </div>
+                                )}
                             </form>
                         </div>
                     </div>
@@ -1401,6 +1427,9 @@ const App: React.FC = () => {
                 onClose={() => setShowSettings(false)}
                 onSave={handleSaveSettings}
                 currentSettings={settings}
+                installPromptEvent={installPromptEvent}
+                isStandalone={isStandalone}
+                onInstall={handleInstallApp}
             />
             {isCameraOpen && (
                 <div className="fixed inset-0 bg-black z-[100] flex flex-col" role="dialog" aria-modal="true">

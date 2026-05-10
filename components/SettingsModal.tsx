@@ -9,9 +9,15 @@ interface SettingsModalProps {
   onClose: () => void;
   onSave: (settings: AppSettings) => void;
   currentSettings: AppSettings;
+  installPromptEvent: any;
+  isStandalone: boolean;
+  onInstall: () => void;
 }
 
-const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, onSave, currentSettings }) => {
+const SettingsModal: React.FC<SettingsModalProps> = ({ 
+  isOpen, onClose, onSave, currentSettings, 
+  installPromptEvent, isStandalone, onInstall 
+}) => {
   const [settings, setSettings] = useState(currentSettings);
   const [showHelp, setShowHelp] = useState(false);
   const { t } = useAppContext();
@@ -113,8 +119,27 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, onSave, 
                     <li><button onClick={() => scrollToSection('api-key-section')} className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 bg-white md:bg-transparent px-3 py-1.5 md:p-0 rounded-full md:rounded-none shadow-sm md:shadow-none w-auto md:w-full ltr:text-left rtl:text-right transition">{t('settings.apiKey.label')}</button></li>
                     <li><button onClick={() => scrollToSection('student-groups-section')} className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 bg-white md:bg-transparent px-3 py-1.5 md:p-0 rounded-full md:rounded-none shadow-sm md:shadow-none w-auto md:w-full ltr:text-left rtl:text-right transition">{t('settings.studentGroups.label')}</button></li>
                     <li><button onClick={() => scrollToSection('advanced-settings-section')} className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 bg-white md:bg-transparent px-3 py-1.5 md:p-0 rounded-full md:rounded-none shadow-sm md:shadow-none w-auto md:w-full ltr:text-left rtl:text-right transition">{t('settings.advanced.title')}</button></li>
+                    {installPromptEvent && !isStandalone && (
+                        <li><button onClick={() => scrollToSection('pwa-section')} className="text-sm font-bold text-green-600 dark:green-400 hover:text-green-700 dark:hover:text-green-300 bg-white md:bg-transparent px-3 py-1.5 md:p-0 rounded-full md:rounded-none shadow-sm md:shadow-none w-auto md:w-full ltr:text-left rtl:text-right transition">{t('pwa.installButton')}</button></li>
+                    )}
                 </ul>
             </nav>
+            {installPromptEvent && !isStandalone && (
+                <>
+                    <hr className="my-6 border-gray-200 dark:border-gray-600" />
+                    <div id="pwa-section" className="scroll-mt-6 bg-green-50 dark:bg-green-900/10 p-5 rounded-2xl border border-green-200 dark:border-green-800/30">
+                        <h3 className="text-lg font-bold text-green-800 dark:text-green-400 mb-2">{t('pwa.title')}</h3>
+                        <p className="text-sm text-green-700 dark:text-green-300 mb-4">{t('pwa.description')}</p>
+                        <button 
+                            onClick={onInstall}
+                            className="bg-green-600 hover:bg-green-700 text-white font-bold py-2.5 px-6 rounded-xl transition-all shadow-md flex items-center gap-2"
+                        >
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                            {t('pwa.installButton')}
+                        </button>
+                    </div>
+                </>
+            )}
           </div>
 
           <div className="flex-grow overflow-y-auto p-4 sm:p-6">
