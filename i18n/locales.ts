@@ -245,6 +245,15 @@ export const translations = {
         placeholder: 'Exemple : Se concentrer sur la clarté de l\'explication et ignorer les fautes d\'orthographe...',
         note: 'Ajoutez des instructions spéciales que le correcteur IA devra prendre en compte lors de la correction.',
       },
+      standards: {
+        title: 'Normes de qualité de l\'évaluation',
+        validityTitle: 'Validité (الصدق)',
+        validityDesc: 'Mesure dans laquelle la mesure quantitative est capable d\'évaluer réellement la compétence requise.',
+        reliabilityTitle: 'Fidélité / Fiabilité (الثبات)',
+        reliabilityDesc: 'Produire des résultats proches et convergents, même en cas de changement d\'enseignant ou d\'établissement.',
+        fairnessTitle: 'Équité / Impartialité (الإنصاف)',
+        fairnessDesc: 'Application des mêmes critères et normes à tous les élèves sans discrimination aucune.',
+      },
     },
     pwa: {
         title: 'Installez l\'application sur votre appareil',
@@ -508,6 +517,15 @@ export const translations = {
         placeholder: 'Example: Focus on the clarity of the explanation, and overlook spelling errors...',
         note: 'Add special instructions for the AI grader to consider during correction.',
       },
+      standards: {
+        title: 'Assessment Quality Standards',
+        validityTitle: 'Validity (الصدق)',
+        validityDesc: 'The extent to which the quantitative measurement is capable of actually measuring the targeted competency.',
+        reliabilityTitle: 'Reliability (الثبات)',
+        reliabilityDesc: 'Yielding close and convergent results even when the teacher or institution changes.',
+        fairnessTitle: 'Fairness (الإنصاف)',
+        fairnessDesc: 'Applying the same criteria and standards to all students without any discrimination.',
+      },
     },
     pwa: {
         title: 'Install the App on Your Device',
@@ -770,6 +788,15 @@ export const translations = {
         label: 'تعليمات إضافية (Custom Instructions)',
         placeholder: 'مثال: ركز على وضوح الشرح وتجاوز عن الأخطاء الإملائية...',
         note: 'أضف تعليمات خاصة ليأخذها المصحح الذكي بعين الاعتبار أثناء التصحيح.',
+      },
+      standards: {
+        title: 'معايير جودة التقييم',
+        validityTitle: 'الصدق (Validity)',
+        validityDesc: 'مدى قدرة القياس الكمي على قياس الكفاية المطلوبة فعلاً.',
+        reliabilityTitle: 'الثبات (Reliability)',
+        reliabilityDesc: 'منح نتائج متقاربة حتى في حال تغير الأستاذ أو المؤسسة.',
+        fairnessTitle: 'الإنصاف (Fairness)',
+        fairnessDesc: 'تطبيق المعايير نفسها على جميع التلاميذ دون تمييز.',
       },
     },
     pwa: {

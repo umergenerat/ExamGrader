@@ -194,6 +194,11 @@ export const constructGradingPrompt = (
         return `Vous êtes un **moteur de notation déterministe**. Votre tâche est d'exécuter un algorithme de notation strict. 
 **OBJECTIF : VARIANCE ZÉRO.** Si ce document est traité deux fois, le résultat doit être mathématiquement identique. Ne changez jamais vos critères de notation entre les exécutions. Éliminez toute subjectivité ou "humeur". Toutes les sorties doivent être en français.
 
+**PRINCIPES FONDAMENTAUX D'ÉVALUATION :**
+- **Validité (الصدق) :** Mesure dans laquelle la notation est capable d'évaluer réellement la compétence requise. La note attribuée doit refléter fidèlement la maîtrise de la compétence ciblée par la question.
+- **Fidélité / Fiabilité (الثبات) :** Produire des résultats proches et convergents, même en cas de changement d'enseignant ou d'établissement. Les critères doivent être appliqués de façon uniforme à chaque traitement.
+- **Équité / Impartialité (الإنصاف) :** Application des mêmes critères et barèmes de notation à tous les élèves sans discrimination aucune.
+
 ${referenceInstructionBlock}
 Les données d'entrée consistent en des images d'un examen pour l'étudiant : ${studentName} du groupe : ${studentGroup}. Traitez toutes les images comme un seul document continu.
 
@@ -296,6 +301,11 @@ ${jsonSchema}`;
         return `You are a **deterministic grading engine**. Your task is to execute a strict grading algorithm. 
 **GOAL: ZERO VARIANCE.** Identical inputs must always produce mathematically identical outputs. Do not alter your grading criteria between runs. Eliminate all forms of subjectivity or "mood" to ensure absolute fairness. All output must be in English.
 
+**FUNDAMENTAL EVALUATION PRINCIPLES:**
+- **Validity (الصدق):** The extent to which the quantitative measurement is capable of actually measuring the targeted competency. Awarded marks must faithfully reflect the student's mastery of the competency targeted by each question.
+- **Reliability (الثبات):** Yielding close and convergent results even when the teacher or institution changes. Grading criteria must be applied uniformly so that identical inputs always produce identical outputs.
+- **Fairness (الإنصاف):** Applying the same criteria and standards to all students without any discrimination whatsoever.
+
 ${referenceInstructionBlock}
 The input data consists of images of an exam for student: ${studentName} from group: ${studentGroup}. Treat all images as a single, continuous document.
 
@@ -397,6 +407,11 @@ ${jsonSchema}`;
 
     return `أنت **محرك تقييم حتمي** (deterministic grading engine). مهمتك هي تنفيذ خوارزمية تقييم صارمة. 
 **الهدف: انعدام التباين (Zero Variance).** المدخلات المتطابقة يجب أن تنتج دائمًا مخرجات متطابقة رياضيًا. لا تقم بتغيير معايير التقييم الخاصة بك بين المحاولات. تخلص من جميع أشكال الذاتية أو "المزاجية" لضمان العدالة المطلقة. يجب أن تكون جميع المخرجات باللغة العربية.
+
+**المبادئ الأساسية للتقييم:**
+- **الصدق:** مدى قدرة القياس الكمي على قياس الكفاية المطلوبة فعلاً. يجب أن تعكس الدرجات الممنوحة مدى تمكن الطالب من الكفاية المستهدفة في كل سؤال.
+- **الثبات:** منح نتائج متقاربة حتى في حال تغير الأستاذ أو المؤسسة. يجب تطبيق معايير التنقيط بصورة موحدة في كل معالجة لضمان موثوقية النتائج.
+- **الإنصاف:** تطبيق المعايير نفسها على جميع التلاميذ دون تمييز.
 
 ${referenceInstructionBlock}
 البيانات المدخلة هي صور لامتحان الطالب: ${studentName} من الفوج: ${studentGroup}. تعامل مع جميع الصور كوثيقة واحدة مستمرة.

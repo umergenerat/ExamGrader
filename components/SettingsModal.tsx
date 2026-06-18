@@ -119,6 +119,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
                     <li><button onClick={() => scrollToSection('api-key-section')} className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 bg-white md:bg-transparent px-3 py-1.5 md:p-0 rounded-full md:rounded-none shadow-sm md:shadow-none w-auto md:w-full ltr:text-left rtl:text-right transition">{t('settings.apiKey.label')}</button></li>
                     <li><button onClick={() => scrollToSection('student-groups-section')} className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 bg-white md:bg-transparent px-3 py-1.5 md:p-0 rounded-full md:rounded-none shadow-sm md:shadow-none w-auto md:w-full ltr:text-left rtl:text-right transition">{t('settings.studentGroups.label')}</button></li>
                     <li><button onClick={() => scrollToSection('advanced-settings-section')} className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 bg-white md:bg-transparent px-3 py-1.5 md:p-0 rounded-full md:rounded-none shadow-sm md:shadow-none w-auto md:w-full ltr:text-left rtl:text-right transition">{t('settings.advanced.title')}</button></li>
+                    <li><button onClick={() => scrollToSection('standards-section')} className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 bg-white md:bg-transparent px-3 py-1.5 md:p-0 rounded-full md:rounded-none shadow-sm md:shadow-none w-auto md:w-full ltr:text-left rtl:text-right transition">{t('settings.standards.title')}</button></li>
                     {installPromptEvent && !isStandalone && (
                         <li><button onClick={() => scrollToSection('pwa-section')} className="text-sm font-bold text-green-600 dark:green-400 hover:text-green-700 dark:hover:text-green-300 bg-white md:bg-transparent px-3 py-1.5 md:p-0 rounded-full md:rounded-none shadow-sm md:shadow-none w-auto md:w-full ltr:text-left rtl:text-right transition">{t('pwa.installButton')}</button></li>
                     )}
@@ -290,6 +291,61 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
                    <p className="text-xs text-gray-500 mt-2">
                     {t('settings.customInstructions.note')}
                   </p>
+                </div>
+              </div>
+            </div>
+
+            <hr className="my-6 border-gray-200 dark:border-gray-600" />
+
+            <div id="standards-section" className="scroll-mt-6 mb-2">
+              <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white flex items-center gap-2">
+                <svg className="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+                </svg>
+                {t('settings.standards.title')}
+              </h3>
+              
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {/* Validity Card */}
+                <div className="relative overflow-hidden rounded-2xl border border-blue-100 dark:border-blue-900/30 p-5 bg-gradient-to-br from-blue-50/50 to-indigo-50/30 dark:from-blue-950/20 dark:to-indigo-950/10 hover:shadow-md transition-all duration-300 group">
+                  <div className="absolute top-0 right-0 -mr-6 -mt-6 w-20 h-20 rounded-full bg-blue-500/5 blur-xl group-hover:bg-blue-500/10 transition-all"></div>
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="p-2.5 bg-blue-500 text-white rounded-xl shadow-md shadow-blue-500/20 group-hover:scale-110 transition-transform">
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 3v1.5M12 19.5V21M3 12h1.5M19.5 12H21m-9-9a9 9 0 100 18 9 9 0 000-18zm0 5a4 4 0 100 8 4 4 0 000-8zm0 2a2 2 0 100 4 2 2 0 000-4z" />
+                      </svg>
+                    </div>
+                    <h4 className="font-bold text-gray-900 dark:text-white text-sm">{t('settings.standards.validityTitle')}</h4>
+                  </div>
+                  <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">{t('settings.standards.validityDesc')}</p>
+                </div>
+
+                {/* Reliability Card */}
+                <div className="relative overflow-hidden rounded-2xl border border-purple-100 dark:border-purple-900/30 p-5 bg-gradient-to-br from-purple-50/50 to-pink-50/30 dark:from-purple-950/20 dark:to-pink-950/10 hover:shadow-md transition-all duration-300 group">
+                  <div className="absolute top-0 right-0 -mr-6 -mt-6 w-20 h-20 rounded-full bg-purple-500/5 blur-xl group-hover:bg-purple-500/10 transition-all"></div>
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="p-2.5 bg-purple-500 text-white rounded-xl shadow-md shadow-purple-500/20 group-hover:scale-110 transition-transform">
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z" />
+                      </svg>
+                    </div>
+                    <h4 className="font-bold text-gray-900 dark:text-white text-sm">{t('settings.standards.reliabilityTitle')}</h4>
+                  </div>
+                  <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">{t('settings.standards.reliabilityDesc')}</p>
+                </div>
+
+                {/* Fairness Card */}
+                <div className="relative overflow-hidden rounded-2xl border border-emerald-100 dark:border-emerald-900/30 p-5 bg-gradient-to-br from-emerald-50/50 to-teal-50/30 dark:from-emerald-950/20 dark:to-teal-950/10 hover:shadow-md transition-all duration-300 group">
+                  <div className="absolute top-0 right-0 -mr-6 -mt-6 w-20 h-20 rounded-full bg-emerald-500/5 blur-xl group-hover:bg-emerald-500/10 transition-all"></div>
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="p-2.5 bg-emerald-500 text-white rounded-xl shadow-md shadow-emerald-500/20 group-hover:scale-110 transition-transform">
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 3v18M12 5.25L18.75 8M12 5.25L5.25 8M5.25 8l-1.5 5.25h3L5.25 8zm13.5 0l-1.5 5.25h3l-1.5-5.25zM12 18.75h6.75M12 18.75H5.25" />
+                      </svg>
+                    </div>
+                    <h4 className="font-bold text-gray-900 dark:text-white text-sm">{t('settings.standards.fairnessTitle')}</h4>
+                  </div>
+                  <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">{t('settings.standards.fairnessDesc')}</p>
                 </div>
               </div>
             </div>
