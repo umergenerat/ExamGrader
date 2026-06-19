@@ -212,11 +212,12 @@ Exécutez l'algorithme suivant avec une précision absolue :
 
 2.  **Évaluation par question** :
     -   Pour chaque question, évaluez la réponse de l'étudiant sur la base de critères académiques stricts et du matériel de référence fourni. ${strictnessInstruction}
+    -   **Respect des Principes Fondamentaux :** Assurez-vous que le score attribué respecte strictement les principes de **Validité (الصدق)**, de **Fidélité/Fiabilité (الثبات)**, et d'**Équité/Impartialité (الإنصاف)**.
     -   Attribuez un score \`marksAwarded\` pour chaque question.
     -   Formulez une \`idealAnswer\` (réponse idéale) concise.
-    -   Rédigez une \`evaluation\` qui justifie objectivement le \`marksAwarded\` attribué.
+    -   Rédigez une \`evaluation\` qui justifie objectivement le \`marksAwarded\` attribué, en explicitant comment l'évaluation reflète fidèlement la compétence ciblée par la question (الصدق) et applique équitablement et uniformément les critères de notation (الإنصاف et الثبات).
     -   **Classification de Bloom :** Classifiez chaque question selon la Taxonomie de Bloom révisée. Attribuez exactement l'un de ces niveaux : \`knowledge\` (mémorisation), \`comprehension\` (compréhension), \`application\` (application), \`analysis\` (analyse), \`synthesis\` (synthèse), \`evaluation\` (évaluation critique).
-    -   **Niveau de performance :** Évaluez la performance de l'étudiant sur chaque question en attribuant exactement l'un de ces niveaux : \`excellent\` (maîtrise complète), \`good\` (bonne maîtrise avec erreurs mineures), \`acceptable\` (compréhension partielle), \`insufficient\` (compréhension très limitée), \`absent\` (pas de réponse ou hors sujet).
+    -   **Niveau de performance :** Évaluez la performance de l'étudiant sur chaque question en attribuant exactement l'un de ces niveaux : \`excellent\` (maîtrise complète), \`good\` (bonne maîtrise avec erreurs mineures), \`acceptable\` (comprehension partielle), \`insufficient\` (compréhension très limitée), \`absent\` (pas de réponse ou hors sujet).
 
 3.  **Agrégation des résultats** :
     -   Calculez le \`score\` total.
@@ -319,9 +320,10 @@ Execute the following algorithm with absolute precision:
 
 2.  **Evaluation per Question**:
     -   For each question, evaluate the student's answer based on strict academic criteria and the provided reference material. ${strictnessInstruction}
+    -   **Adherence to Core Principles:** Ensure the marks awarded strictly respect the principles of **Validity (الصدق)**, **Reliability (الثبات)**, and **Fairness (الإنصاف)**.
     -   Award a \`marksAwarded\` score for each question.
     -   Formulate a concise \`idealAnswer\`.
-    -   Write an \`evaluation\` that objectively justifies the \`marksAwarded\` given.
+    -   Write an \`evaluation\` that objectively justifies the \`marksAwarded\` given, clarifying how the mark accurately assesses the targeted competency (Validity) and applies grading criteria uniformly (Reliability) and fairly (Fairness).
     -   **Bloom's Classification:** Classify each question according to Bloom's Revised Taxonomy. Assign exactly one of: \`knowledge\` (recall), \`comprehension\` (understanding), \`application\` (applying), \`analysis\` (analyzing), \`synthesis\` (creating), \`evaluation\` (critical judgment).
     -   **Performance Level:** Rate the student's performance on each question using exactly one of: \`excellent\` (full mastery), \`good\` (good mastery with minor errors), \`acceptable\` (partial understanding), \`insufficient\` (very limited understanding), \`absent\` (no answer or off-topic).
 
@@ -426,9 +428,10 @@ ${referenceInstructionBlock}
 
 2.  **التقييم لكل سؤال (Evaluation per Question)**:
     -   لكل سؤال، قم بتقييم إجابة الطالب بناءً على معايير أكاديمية صارمة والمواد المرجعية المقدمة. ${strictnessInstruction}
+    -   **الالتزام بالمبادئ الأساسية:** تأكد تمامًا من أن التنقيط في كل سؤال يستند بدقة إلى مبادئ **الصدق**، و**الثبات**، و**الإنصاف**.
     -   امنح درجة \`marksAwarded\` لكل سؤال.
     -   صغ \`idealAnswer\` (إجابة مثالية) موجزة.
-    -   اكتب \`evaluation\` (تقييم) يبرر الدرجة الممنوحة \`marksAwarded\` بشكل موضوعي.
+    -   اكتب \`evaluation\` (تقييم الإجابة) يبرر الدرجة الممنوحة \`marksAwarded\` بشكل موضوعي، مع توضيح كيف يعكس التنقيط مدى تمكن الطالب من الكفاية المستهدفة (الصدق) وتطبيق سلم التنقيط بشكل عادل (الإنصاف) وموحد (الثبات).
     -   **تصنيف بلوم:** صنف كل سؤال حسب تصنيف بلوم المُراجع. اختر واحدًا بالضبط من: \`knowledge\` (تذكر/حفظ)، \`comprehension\` (فهم)، \`application\` (تطبيق)، \`analysis\` (تحليل)، \`synthesis\` (تركيب/إبداع)، \`evaluation\` (تقييم نقدي).
     -   **مستوى الأداء:** قيّم أداء الطالب في كل سؤال باختيار واحد بالضبط من: \`excellent\` (إتقان تام)، \`good\` (إتقان جيد مع أخطاء طفيفة)، \`acceptable\` (فهم جزئي)، \`insufficient\` (فهم محدود جدًا)، \`absent\` (لا إجابة أو خارج الموضوع).
 
