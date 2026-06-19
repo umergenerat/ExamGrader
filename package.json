@@ -22,7 +22,10 @@
     "xlsx": "^0.18.5"
   },
   "devDependencies": {
+    "@types/file-saver": "^2.0.7",
     "@types/node": "^22.14.0",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.0.0",
     "typescript": "~5.8.2",
     "vite": "^6.2.0",

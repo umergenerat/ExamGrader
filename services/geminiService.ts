@@ -519,7 +519,10 @@ export const gradeExam = async (
                 },
             });
             
-            const resultText = response.text.trim();
+            const resultText = response.text?.trim();
+            if (!resultText) {
+                throw new Error("EMPTY_RESPONSE");
+            }
             let jsonString = '';
 
             const markdownMatch = resultText.match(/```(json)?\s*([\s\S]+?)\s*```/);
